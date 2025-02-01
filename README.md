@@ -8,15 +8,15 @@ The main challenge is to create a scalable and modular system that clearly separ
 
 ---
 
-## Sequence Diagrams
+## Sequence Diagrams for interaction between client and server
 
-### Global Sequence Diagram
-![Global Sequence Diagram](./sequence_diagram_global.png)
+### Trigger Sequence Diagram
+![Trigger sequence diagram](./trigger_sequence_diagram.png)
 
-### Client Sequence Diagram
-![Client Sequence Diagram](./sequence_diagram_client.png)
+### Offers validation Sequence Diagram
+![Offers validation sequence diagram](./offers_validation_sequence_diagram.png)
 
----
+### Offers validation Sequence Diagram
+![Player purchase sequence diagram](./player_purchase_sequence_diagram.png)
 
-## Client Class Diagram
-![Client Class Diagram](./class_diagram_client.png)
+--- 
