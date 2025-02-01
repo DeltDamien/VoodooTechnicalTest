@@ -5,8 +5,18 @@ This project aims to design a personalized offer system for a mobile game SDK. T
 
 ### Problem Statement
 The main challenge is to create a scalable and modular system that clearly separates responsibilities between the client (Unity) and the server. The system must handle dynamic offers, validate complex conditions, and adapt to new types of offers and triggers with minimal changes.
+---
+
+## Personal Brief Note
+
+The primary goal for me was to make most of the logic server-side to ensure **scalability** and **security**. I aimed to create a package that is "clef en main" (ready-to-use) for other developers, allowing them to easily integrate it into their games. I tried to make the SDK as **engine-agnostic** as possible (well, Unity-agnostic in our case), except for the SDK entry point and the use of `UnityWebRequest` (which can be replaced with `HttpClient` in another implementation) in the service.
+
+I know I spent some time trying to imagine all possible backend services (e.g., purchase, user acquisition, authentication) and eventually removed my initial diagrams to focus solely on **personalized offers** in multiple diagrams (with notes to replace the older, more complex diagrams). Oh, and I also spent time on Postman documentation and Markdown files because I wanted a clean `README` (which should probably be divided into multiple files with links—sorry!). But I'm not sure if that was really a waste of time.
+
+Regarding **additional features**, I think more **client-side caching** would be interesting to create a more robust fallback system. A **push notification system** could also be added, with specific endpoints to fetch future personalized offers for the player. Additionally, **battle pass personalized offers** could be a great way to attract new players, and **multi-game personalized offers** (e.g., buy an offer to unlock unique items in another Voodoo game) could add a new layer of engagement.
 
 ---
+
 
 ## Sequence Diagrams for interaction between client and server
 
