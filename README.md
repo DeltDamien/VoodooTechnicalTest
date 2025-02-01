@@ -29,6 +29,12 @@ Regarding **additional features**, I think more **client-side caching** would be
 ### Offers validation Sequence Diagram
 ![Player purchase sequence diagram](./player_purchase_sequence_diagram.png)
 
+## Infrastructure overview
+
+It's a try but was interesting time spent, eager to learn more about tools I don't know
+
+![Player purchase sequence diagram](./infrastructure_overview_diagram.png)
+
 --- 
 
 ## API Endpoint Definitions
@@ -430,3 +436,5 @@ I've never used myself contrary to the 2 other but I know it exists.
    - Useful for quick validation or sharing with non-technical team members (and if you know how to use it).
 
 ---
+
+
