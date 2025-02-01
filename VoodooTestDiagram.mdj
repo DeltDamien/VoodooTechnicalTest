@@ -18453,6 +18453,24 @@
 					"type": ""
 				}
 			]
+		},
+		{
+			"_type": "UMLModel",
+			"_id": "AAAAAAGUwzsziigwzRU=",
+			"_parent": {
+				"$ref": "AAAAAAFF+h6SjaM2Hec="
+			},
+			"name": "Model1",
+			"ownedElements": [
+				{
+					"_type": "UMLDeploymentDiagram",
+					"_id": "AAAAAAGUwzsziigxUwQ=",
+					"_parent": {
+						"$ref": "AAAAAAGUwzsziigwzRU="
+					},
+					"name": "DeploymentDiagram1"
+				}
+			]
 		}
 	]
 }
