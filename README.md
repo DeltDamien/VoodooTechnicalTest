@@ -31,7 +31,7 @@ Regarding **additional features**, I think more **client-side caching** would be
 
 ## Infrastructure overview
 
-It's a try but was interesting time spent, eager to learn more about tools I don't know
+It's a try but was interesting time spent, eager to learn more about tools I don't know.
 
 ![Player purchase sequence diagram](./infrastructure_overview_diagram.png)
 
