@@ -260,3 +260,163 @@ Network latency or timeouts cause delays or failures in fetching or validating o
     - Provide a set of default offers that can be displayed if the server is to slow.
 
 ---
+
+
+# Mock Server Validation Strategies
+
+To validate the personalized offer system without relying on actual server endpoints, we propose the following three strategies in order of preference:
+
+---
+
+## 1. Unit Tests with Mock Responses directly in Unity
+### Description:
+Use **unit tests** within Unity to simulate server responses. This approach is fully embedded in Unity and can be automated using **GitHub Actions**.
+
+### Detailed Approach:
+1. **Mock Server Responses**:
+   - Create mock JSON responses for each API endpoint
+   - Store these responses as static files or hardcoded strings in Unity.
+
+2. **Unit Tests**:
+   - Write unit tests using Unity’s **Test Framework**.
+   - Use `UnityWebRequest` or a custom HTTP client to simulate API calls and return mock responses.
+
+3. **Automation with GitHub Actions**:
+   - Set up a GitHub Actions workflow to run the unit tests automatically on every push or pull request.
+   - Example workflow:
+     ```yaml
+     name: Unity Tests
+     on: [push, pull_request]
+     jobs:
+       test:
+         runs-on: ubuntu-latest
+         steps:
+           - uses: actions/checkout@v2
+           - name: Set up Unity
+             uses: game-ci/unity-setup@v2
+             with:
+               unity-version: 6000.0.27f1
+           - name: Run Tests
+             uses: game-ci/unity-test-runner@v2
+             with:
+               test-mode: all 
+     ```
+          
+4. **Testing Techniques**:
+   - Test valid and invalid responses for each endpoint.
+   - Simulate edge cases from "Edge Cases and Mitigation Strategies" section
+
+### Comments:
+- **Pros**:
+  - Fully integrated into Unity.
+  - Easy to automate with GitHub Actions.
+  - No external dependencies.
+- **Cons**:
+  - Requires writing and maintaining mock responses.
+  - Limited to testing client-side logic.
+
+---
+
+## 2. Small Node.js Server with Vite-Express
+### Description:
+Set up a lightweight **Node.js server** using **Vite-Express** to simulate server endpoints. This approach provides more flexibility than unit tests and can be run locally or in a CI/CD pipeline.
+
+### Detailed Approach:
+1. **Set Up Node.js Server**:
+   - Install Node.js and create a new project:
+     ```bash
+     npm init -y
+     npm install express vite-express
+     ```
+   - Create a `server.js` file with mock endpoints:
+     ```javascript
+     const express = require('express');
+     const ViteExpress = require('vite-express');
+
+     const app = express();
+     app.use(express.json());
+
+     app.post('/api/offers/triggered', (req, res) => {
+       res.json([
+         {
+           offerUuid: '123e4567-e89b-12d3-a456-426614174001',
+           rewards: [{ type: 'COINS', amount: 100 }],
+           price: { currency: 'HARD_CURRENCY', amount: 5.99, isOnSale: false },
+           conditions: [{ type: 'LEVEL_PASSED', value: 10 }],
+           cachedState: { isConditionMet: true, isBought: false, offerStartTime: '2023-10-01T12:00:00Z' },
+         },
+       ]);
+     });
+
+     ViteExpress.listen(app, 3000, () => console.log('Mock server running on http://localhost:3000'));
+     ```
+
+2. **Run the Server**:
+   - Start the server:
+     ```bash
+     node server.js
+     ```
+
+3. **Test in Unity**:
+   - Point Unity’s API calls to `http://localhost:3000`.
+   - Test all endpoints and validate the responses.
+
+4. **Testing Techniques**:
+   - Simulate different server responses like success, failure or edge cases.
+
+### Comments:
+- **Pros**:
+  - More flexible than unit tests.
+  - Can simulate real-world server behavior.
+  - Easy to set up and run locally.
+- **Cons**:
+  - Requires additional setup (Node.js, Vite-Express).
+  - Not fully integrated into Unity.
+
+---
+
+## 3. Postman Mock Server
+### Description:
+Use **Postman** to create a mock server and simulate API responses. This approach is quick to set up but requires familiarity with Postman.
+I've never used myself contrary to the 2 other but I know it exists.
+[Documentation here](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/)
+
+### Detailed Approach:
+
+1. **Create a Postman Collection**:
+   - Define all API endpoints in a new collection
+   - Add mock responses for each endpoint.
+   - Use Postman’s **Mock Server** feature to host the collection.
+   - Postman will generate a public URL for the mock server.
+
+2. **Test in Unity**:
+   - Point Unity’s API calls to the Postman mock server URL.
+   - Validate the responses in Unity.
+
+3. **Testing Techniques**:
+   - Simulate different scenarios by updating the mock responses in Postman.
+
+### Comments:
+- **Pros**:
+  - Quick and easy to set up.
+  - No coding required.
+  - Can be shared with the team.
+- **Cons**:
+  - Requires a Postman account.
+  - Limited control over server behavior.
+  - Not integrated into Unity or CI/CD pipelines.
+
+---
+
+### My preferences
+1. **Start with Unit Tests**:
+   - Ideal for initial validation and integration with Unity.
+   - Easy to automate with GitHub Actions.
+
+2. **Use a Node.js Server for Advanced Testing**:
+   - Provides more flexibility and simulates real-world scenarios.
+
+3. **Use Postman for Quick Prototyping**:
+   - Useful for quick validation or sharing with non-technical team members (and if you know how to use it).
+
+---
