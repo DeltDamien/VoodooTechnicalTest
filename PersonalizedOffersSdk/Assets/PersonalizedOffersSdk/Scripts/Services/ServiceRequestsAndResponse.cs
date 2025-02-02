@@ -1,4 +1,4 @@
-using PersonalizedOffersSdk.Offer;
+using PersonalizedOffersSdk.Offers;
 using System;
 
 //TODO : Break into separate files by endpoints later

@@ -5,6 +5,7 @@ using System.Diagnostics;
 
 namespace PersonalizedOffersSdk.Tests
 {
+    // TODO : All theses tests could be improved using not this mock service but another targetting our backend with debug parameters (or node.js or postman
     public class PersonalizedOffersServiceEditModeTests
     {
         private MockPersonalizedOffersService _mockService;

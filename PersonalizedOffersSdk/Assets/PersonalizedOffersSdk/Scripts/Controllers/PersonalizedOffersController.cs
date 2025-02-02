@@ -1,32 +1,29 @@
 using Cysharp.Threading.Tasks;
-using PersonalizedOffersSdk.Offer;
+using PersonalizedOffersSdk.Offers;
 using PersonalizedOffersSdk.Service;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
+using UnityEngine;
 
 namespace PersonalizedOffersSdk.Controller
 {
     public class PersonalizedOffersController
     {
-        private readonly PersonalizedOffersSanityCheckController _personalizedOffersSanityCheckController;
         private readonly Guid _playerUuid;
         private readonly IPersonalizedOffersService _personalizedOffersService;
         // TODO : cache by uuid offers these one to access it faster if needed
-        private List<Offer.Offer> _offers;
+        private List<Offer> _offers;
 
-        public PersonalizedOffersController(Guid playerUuid, IPersonalizedOffersService personalizedOffersService, PersonalizedOffersSanityCheckController personalizedOffersSanityCheckController)
+        public PersonalizedOffersController(Guid playerUuid, IPersonalizedOffersService personalizedOffersService)
         {
-            _offers = new List<Offer.Offer>();
+            _offers = new List<Offer>();
             _playerUuid = playerUuid;
             _personalizedOffersService = personalizedOffersService;
-            _personalizedOffersSanityCheckController = personalizedOffersSanityCheckController;
-            _personalizedOffersSanityCheckController.InjectPersonalizedOfferController(this);
-            _personalizedOffersSanityCheckController.StartSanityCheck();
         }
 
-        public List<Offer.Offer> GetOffers()
+        public List<Offer> GetOffers()
         {
             return _offers;
         }
@@ -58,7 +55,7 @@ namespace PersonalizedOffersSdk.Controller
 
                     if (!existingOfferUuids.Contains(offerData.uuid))
                     {
-                        Offer.Offer offer = new Offer.Offer(triggeredOffers[i]);
+                        Offer offer = new Offer(triggeredOffers[i]);
                         _offers.Add(offer);
                     }
                 }
@@ -74,6 +71,7 @@ namespace PersonalizedOffersSdk.Controller
 
         public bool ValidatePurchaseOffer(Guid offerUuid)
         {
+            _offers.Find(o => o.GetUuid() == offerUuid).MarkAsBought();
             return ValidatePurchaseOfferInternal(offerUuid, false).GetAwaiter().GetResult();
         }
 

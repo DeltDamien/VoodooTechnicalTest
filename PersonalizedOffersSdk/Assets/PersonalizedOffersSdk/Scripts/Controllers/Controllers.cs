@@ -8,11 +8,22 @@ namespace PersonalizedOffersSdk.Controller
         private readonly PersonalizedOffersController _personalizedOfferController;
         private readonly PersonalizedOffersSanityCheckController _personalizedOffersSanityCheckController;
 
-        public Controllers(Services services, Guid playerUUid, float checkInterval)
+        public Controllers(Services services, Guid playerUUid, bool immediateStartSanityCheck, float checkInterval)
         {
-            _personalizedOffersSanityCheckController = new PersonalizedOffersSanityCheckController(checkInterval);
+            _personalizedOfferController = new PersonalizedOffersController(playerUUid, services.GetPersonalizedOffersService());
 
-            _personalizedOfferController = new PersonalizedOffersController(playerUUid, services.GetPersonalizedOffersService(), _personalizedOffersSanityCheckController);
+            _personalizedOffersSanityCheckController = new PersonalizedOffersSanityCheckController(_personalizedOfferController, immediateStartSanityCheck, checkInterval);
+
+        }
+
+        public PersonalizedOffersController GetPersonalizedOffersController()
+        {
+            return _personalizedOfferController;
+        }
+
+        public PersonalizedOffersSanityCheckController GetPersonalizedOffersSanityCheckController()
+        {
+            return _personalizedOffersSanityCheckController;
         }
     }
 }

@@ -8,20 +8,21 @@ namespace PersonalizedOffersSdk.Controller
     {
         private PersonalizedOffersController _personalizedOfferController;
 
-        // our game could have an internal timer system which call our backend (or not)  we should use 
+        // our game could have an internal timer system which call our backend (or not) we should use 
         private Timer _timer;
 
-        public PersonalizedOffersSanityCheckController(float checkInterval)
+        public PersonalizedOffersSanityCheckController(PersonalizedOffersController personalizedOfferController, bool immediateStartSanityCheck, float checkInterval)
         {
+            personalizedOfferController = _personalizedOfferController;
             _timer = new Timer(checkInterval * 1000);
             _timer.Elapsed += OnTimerElapsed;
             _timer.AutoReset = true;
+            if (immediateStartSanityCheck)
+            {
+                StartSanityCheck();
+            }
         }
 
-        public void InjectPersonalizedOfferController(PersonalizedOffersController personalizedOfferController)
-        {
-            _personalizedOfferController = personalizedOfferController;
-        }
 
         public void StartSanityCheck()
         {
@@ -30,7 +31,7 @@ namespace PersonalizedOffersSdk.Controller
 
         public void StopSanityCheck()
         {
-
+            _timer.Stop();
         }
 
         private async void OnTimerElapsed(object sender, ElapsedEventArgs e)
@@ -40,15 +41,7 @@ namespace PersonalizedOffersSdk.Controller
 
         private async UniTask UpdateAllOffersValidationAsync()
         {
-            if (_personalizedOfferController != null)
-            {
-                await _personalizedOfferController.UpdateOffersValidationAsync();
-            }
-            else
-            {
-                _timer.Stop();
-                throw new Exception("PersonalizedOfferController is not injected");
-            }
+            await _personalizedOfferController.UpdateOffersValidationAsync();
         }
 
     }

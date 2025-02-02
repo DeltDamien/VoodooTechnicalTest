@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Cysharp.Threading.Tasks;
-using PersonalizedOffersSdk.Offer;
+using PersonalizedOffersSdk.Offers;
 using PersonalizedOffersSdk.Service;
 using PersonalizedOffersSdk;
 using UnityEditor.PackageManager;

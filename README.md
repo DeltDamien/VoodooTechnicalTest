@@ -74,19 +74,24 @@ Fetches a list of offers triggered for a specific player based on a trigger type
 [
         {
         "uuid": "123e4567-e89b-12d3-a456-426614174001",
+        "title": "Best sale",
+        "description" : "You get sales in your life but trust me it's the one for you !",
         "rewards": [
             { "rewardType": "SoftCurrency", "amount": 100 }
         ],
-        "condition" : [
+        "validationConditions" : [
             {"conditionType" : "TimeLeft", "value" : "86400"}
         ],
         "startTime": "2023-10-01T12:00:00Z",
-        "linkedOffersUid" : [
+        "linkedOffers" : [
             "123e4567-e89b-12d3-a456-426614174001"
-        ]
+        ],
+        "offerType" : "Chained"
     },
     {
         "uuid": "123e4567-e89b-12d3-a456-426614174001",
+        "title": "True best sale",
+        "description" : "I lied it's this one !",
         "rewards": [
             { "rewardType": "SoftCurrency", "amount": 200 },
             { "rewardType": "Energy", "amount": 20 },
@@ -98,10 +103,12 @@ Fetches a list of offers triggered for a specific player based on a trigger type
                 "percent": 10
             }
         },
-        "condition" : [
+        "validationConditions" : [
             {"conditionType" : "LevelSucceed", "value" : "12"}
         ],
         "startTime": "2023-10-01T12:00:00Z",
+        "linkedOffers" : [],
+        "offerType" : "Chained"
     },
 ]
 ```

@@ -1,5 +1,5 @@
 using Cysharp.Threading.Tasks;
-using PersonalizedOffersSdk.Offer;
+using PersonalizedOffersSdk.Offers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

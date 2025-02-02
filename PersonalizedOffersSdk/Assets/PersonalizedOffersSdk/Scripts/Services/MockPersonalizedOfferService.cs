@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using PersonalizedOffersSdk.Offer.Price;
-using PersonalizedOffersSdk.Offer.Reward;
-using PersonalizedOffersSdk.Offer.ValidationCondition;
-using PersonalizedOffersSdk.Offer;
+using PersonalizedOffersSdk.Offers.Prices;
+using PersonalizedOffersSdk.Offers.Rewards;
+using PersonalizedOffersSdk.Offers.ValidationConditions;
+using PersonalizedOffersSdk.Offers;
 using PersonalizedOffersSdk.Service;
 using PersonalizedOffersSdk;
 
@@ -15,8 +15,8 @@ public class MockPersonalizedOffersService : IPersonalizedOffersService
         new OfferData
         {
             uuid = Guid.NewGuid(),
-            title = "Welcome Offer",
-            description = "Special offer for new players!",
+            title = "New Offer !",
+            description = "Special for new players !",
             price = new PriceData { currencyType = CurrencyType.USD, amount = 9.99f },
             rewards = new List<RewardData>
             {
@@ -27,13 +27,34 @@ public class MockPersonalizedOffersService : IPersonalizedOffersService
                 new ValidationConditionData { validationConditionType = ValidationConditionType.TimeLeft, value = "3600" }
             },
             startTime = DateTime.UtcNow,
-            linkedOffers = new List<OfferData>()
+            linkedOffers = new List<Guid>(),
+            offerType = OfferType.Regular
         },
         new OfferData
         {
-            uuid = Guid.NewGuid(),
-            title = "Seasonal Offer",
-            description = "Limited-time seasonal offer!",
+            uuid = Guid.Parse("e61bc7cf-b8d2-42be-aa99-3e2da2a838ea"),
+            title = "Seasonal Offer 1",
+            description = "Limited-time seasonal offer! 1",
+            rewards = new List<RewardData>
+            {
+                new RewardData { rewardType = RewardType.HardCurrency, amount = 5 }
+            },
+            validationConditions = new List<ValidationConditionData>
+            {
+                new ValidationConditionData { validationConditionType = ValidationConditionType.LevelPased, value = "10" }
+            },
+            startTime = DateTime.UtcNow,
+            linkedOffers = new List<Guid>()
+            {
+                Guid.Parse("e61bc7cf-b8d2-42be-aa99-3e2da2a838ef")
+            },
+            offerType = OfferType.Chained
+        },
+        new OfferData
+        {
+            uuid = Guid.Parse("e61bc7cf-b8d2-42be-aa99-3e2da2a838ef"),
+            title = "Seasonal Offer 2",
+            description = "Limited-time seasonal offer! 2",
             price = new PriceData { currencyType = CurrencyType.USD, amount = 399.99f, discountPercent = 20 },
             rewards = new List<RewardData>
             {
@@ -44,7 +65,8 @@ public class MockPersonalizedOffersService : IPersonalizedOffersService
                 new ValidationConditionData { validationConditionType = ValidationConditionType.LevelPased, value = "10" }
             },
             startTime = DateTime.UtcNow,
-            linkedOffers = new List<OfferData>()
+            linkedOffers = new List<Guid>(),
+            offerType = OfferType.Chained
         }
     };
 
