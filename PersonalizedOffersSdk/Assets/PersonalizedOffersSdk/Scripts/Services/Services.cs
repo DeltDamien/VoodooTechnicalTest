@@ -6,14 +6,14 @@ namespace PersonalizedOffersSdk.Service
     {
         private IPersonalizedOffersService _personalizedOffersService;
 
-        Services(Guid authToken, string baseUrl, bool isDebug = false)
+        public Services(Guid authToken, string backendAdress, bool isDebug = false)
         {
             if (isDebug)
             {
                 _personalizedOffersService = new MockPersonalizedOffersService();
             } else
             {
-                _personalizedOffersService = new PersonalizedOffersService(authToken, baseUrl);
+                _personalizedOffersService = new PersonalizedOffersService(authToken, backendAdress);
             }
         }
 

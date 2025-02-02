@@ -1,18 +1,21 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PersonalizedOffersParameters", menuName = "Scriptable Objects/PersonalizedOffersParameters")]
-public class PersonalizedOffersParameters : ScriptableObject
+namespace PersonalizedOffersSdk
 {
-    [SerializeField] private string _backendAdress;
+    [CreateAssetMenu(fileName = "PersonalizedOffersParameters", menuName = "Scriptable Objects/PersonalizedOffersParameters")]
+    public class PersonalizedOffersParameters : ScriptableObject
+    {
+        [SerializeField] private string _backendAdress;
 
-    [SerializeField]
-    [Range(10, 1800)]
-    private int _sanityCheckPeriodInSecond;
+        [SerializeField]
+        [Range(10, 1800)]
+        private int _sanityCheckPeriodInSecond;
 
 
-    public string BackendAdress => _backendAdress;
+        public string BackendAdress => _backendAdress;
 
-    
-    public float SanityCheckPeriodInSecond => _sanityCheckPeriodInSecond;
 
+        public float SanityCheckPeriodInSecond => _sanityCheckPeriodInSecond;
+
+    }
 }

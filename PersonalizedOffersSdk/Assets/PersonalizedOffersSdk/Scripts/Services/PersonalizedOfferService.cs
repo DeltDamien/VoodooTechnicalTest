@@ -21,14 +21,14 @@ namespace PersonalizedOffersSdk.Service
         private const string _validOffersEndpoint = "/api/offers/valid";
 
 
-        private readonly string _baseUrl;
+        private readonly string _backendAdress;
         private readonly Guid _authToken;
 
 
-        public PersonalizedOffersService(Guid authToken, string baseUrl)
+        public PersonalizedOffersService(Guid authToken, string backendAdress)
         {
             _authToken = authToken;
-            _baseUrl = baseUrl;
+            _backendAdress = backendAdress;
         }
 
         private UnityWebRequest CreateRequest(string url, string method, string jsonPayload = null)
@@ -62,7 +62,7 @@ namespace PersonalizedOffersSdk.Service
 
         public async UniTask<List<OfferData>> GetTriggeredOffersAsync(Guid playerUuid, TriggerType trigger)
         {
-            UnityWebRequest request = CreateRequest(_baseUrl + _triggeredOffersEndpoint, "POST", JsonUtility.ToJson(new TriggeredOffersRequest
+            UnityWebRequest request = CreateRequest(_backendAdress + _triggeredOffersEndpoint, "POST", JsonUtility.ToJson(new TriggeredOffersRequest
             {
                 playerUuid = playerUuid,
                 trigger = trigger
@@ -77,7 +77,7 @@ namespace PersonalizedOffersSdk.Service
 
         public List<OfferData> GetTriggeredOffers(Guid playerUuid, TriggerType trigger)
         {
-            UnityWebRequest request = CreateRequest(_baseUrl + _triggeredOffersEndpoint, "POST", JsonUtility.ToJson(new TriggeredOffersRequest
+            UnityWebRequest request = CreateRequest(_backendAdress + _triggeredOffersEndpoint, "POST", JsonUtility.ToJson(new TriggeredOffersRequest
             {
                 playerUuid = playerUuid,
                 trigger = trigger
@@ -112,7 +112,7 @@ namespace PersonalizedOffersSdk.Service
 
         public async UniTask<bool> ValidatePurchaseOfferAsync(Guid playerUuid, Guid offerUuid)
         {
-            UnityWebRequest request = CreateRequest(_baseUrl + _validatePurchaseEndpoint, "POST", JsonUtility.ToJson(new ValidateOfferRequest
+            UnityWebRequest request = CreateRequest(_backendAdress + _validatePurchaseEndpoint, "POST", JsonUtility.ToJson(new ValidateOfferRequest
             {
                 playerUuid = playerUuid,
                 offerUuid = offerUuid
@@ -126,7 +126,7 @@ namespace PersonalizedOffersSdk.Service
 
         public bool ValidatePurchaseOffer(Guid playerUuid, Guid offerUuid)
         {
-            UnityWebRequest request = CreateRequest(_baseUrl + _validatePurchaseEndpoint, "POST", JsonUtility.ToJson(new ValidateOfferRequest
+            UnityWebRequest request = CreateRequest(_backendAdress + _validatePurchaseEndpoint, "POST", JsonUtility.ToJson(new ValidateOfferRequest
             {
                 playerUuid = playerUuid,
                 offerUuid = offerUuid
@@ -162,7 +162,7 @@ namespace PersonalizedOffersSdk.Service
 
         public async UniTask<bool> CancelledOfferAsync(Guid playerUuid, Guid offerUuid)
         {
-            UnityWebRequest request = CreateRequest(_baseUrl + _cancelOfferEndpoint, "POST", JsonUtility.ToJson(new CancelledOfferRequest
+            UnityWebRequest request = CreateRequest(_backendAdress + _cancelOfferEndpoint, "POST", JsonUtility.ToJson(new CancelledOfferRequest
             {
                 playerUuid = playerUuid.ToString(),
                 offerUuid = offerUuid.ToString()
@@ -176,7 +176,7 @@ namespace PersonalizedOffersSdk.Service
 
         public bool CancelledOffer(Guid playerUuid, Guid offerUuid)
         {
-            UnityWebRequest request = CreateRequest(_baseUrl + _cancelOfferEndpoint, "POST", JsonUtility.ToJson(new CancelledOfferRequest
+            UnityWebRequest request = CreateRequest(_backendAdress + _cancelOfferEndpoint, "POST", JsonUtility.ToJson(new CancelledOfferRequest
             {
                 playerUuid = playerUuid.ToString(),
                 offerUuid = offerUuid.ToString()
@@ -210,7 +210,7 @@ namespace PersonalizedOffersSdk.Service
 
         public async UniTask<List<Guid>> GetValidOffersAsync(Guid playerUuid)
         {
-            UnityWebRequest unityWebRequest = CreateRequest(_baseUrl + _validOffersEndpoint, "GET");
+            UnityWebRequest unityWebRequest = CreateRequest(_backendAdress + _validOffersEndpoint, "GET");
             UnityWebRequestAsyncOperation operation = unityWebRequest.SendWebRequest();
             await operation;
             return handleValidOffersResult(unityWebRequest);
@@ -218,7 +218,7 @@ namespace PersonalizedOffersSdk.Service
 
         public List<Guid> GetValidOffers(Guid playerUuid)
         {
-            UnityWebRequest unityWebRequest = CreateRequest(_baseUrl + _validOffersEndpoint, "GET");
+            UnityWebRequest unityWebRequest = CreateRequest(_backendAdress + _validOffersEndpoint, "GET");
             unityWebRequest.SendWebRequest();
             while (!unityWebRequest.isDone)
             {

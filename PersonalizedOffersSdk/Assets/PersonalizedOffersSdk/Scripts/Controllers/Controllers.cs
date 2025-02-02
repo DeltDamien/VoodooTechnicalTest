@@ -5,10 +5,10 @@ namespace PersonalizedOffersSdk.Controller
 {
     public class Controllers
     {
-        private PersonalizedOffersController _personalizedOfferController;
-        private PersonalizedOffersSanityCheckController _personalizedOffersSanityCheckController;
+        private readonly PersonalizedOffersController _personalizedOfferController;
+        private readonly PersonalizedOffersSanityCheckController _personalizedOffersSanityCheckController;
 
-        Controllers(Services services, Guid playerUUid, float checkInterval)
+        public Controllers(Services services, Guid playerUUid, float checkInterval)
         {
             _personalizedOffersSanityCheckController = new PersonalizedOffersSanityCheckController(checkInterval);
 
