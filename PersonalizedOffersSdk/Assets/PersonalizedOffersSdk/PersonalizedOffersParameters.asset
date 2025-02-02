@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: PersonalizedOffersParameters
   m_EditorClassIdentifier: 
   _backendAdress: dasdas
+  _immediateStartSanityCheck: 1
   _sanityCheckPeriodInSecond: 10
