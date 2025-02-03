@@ -4,18 +4,23 @@ using UnityEngine;
 
 namespace PersonalizedOffersSdk.Offers.ValidationConditions
 {
-    // Allow us to have common type for validation condition, a string then parse it to what we need
-    public static class ValidationConditionParser
+    public class ValidationConditionController
     {
-        private static readonly Dictionary<ValidationConditionType, Func<string, object>> _parsers = new() 
-        {
-            { ValidationConditionType.TimeLeft, ParseTimeLeft },
-            { ValidationConditionType.LevelPased, ParseLevelSucceed },
-            { ValidationConditionType.OtherOfferBought, ParseOfferToComplete },
-            { ValidationConditionType.FeatureUnlocked,  ParseFeatureUnlocked}
-        };
+        // Allow us to have common type for validation condition, a string then parse it to what we need
+        private readonly Dictionary<ValidationConditionType, Func<string, object>> _parsers;
 
-        public static object Parse(ValidationConditionType type, string value)
+        public ValidationConditionController()
+        {
+            _parsers = new Dictionary<ValidationConditionType, Func<string, object>>
+            {
+                {ValidationConditionType.TimeLeft, ParseTimeLeft},
+                {ValidationConditionType.LevelPassed, ParseLevelSucceed},
+                {ValidationConditionType.OtherOfferBought, ParseOfferToComplete},
+                {ValidationConditionType.FeatureUnlocked, ParseFeatureUnlocked}
+            };
+        }
+
+        public object Parse(ValidationConditionType type, string value)
         {
             if (_parsers.TryGetValue(type, out var parser))
             {
@@ -25,7 +30,7 @@ namespace PersonalizedOffersSdk.Offers.ValidationConditions
             return null;
         }
 
-        private static object ParseTimeLeft(string value)
+        private object ParseTimeLeft(string value)
         {
             bool parseSuccess = int.TryParse(value, out int timeLeftInSeconds);
             if (!parseSuccess)
@@ -36,7 +41,7 @@ namespace PersonalizedOffersSdk.Offers.ValidationConditions
             return timeLeftInSeconds;
         }
 
-        private static object ParseLevelSucceed(string value)
+        private object ParseLevelSucceed(string value)
         {
             bool parseSuccess = int.TryParse(value, out int level);
             if (!parseSuccess)
@@ -47,7 +52,7 @@ namespace PersonalizedOffersSdk.Offers.ValidationConditions
             return level;
         }
 
-        private static object ParseOfferToComplete(string value)
+        private object ParseOfferToComplete(string value)
         {
             bool parseSuccess = Guid.TryParse(value, out Guid offerUuid);
             if (!parseSuccess)
@@ -58,7 +63,7 @@ namespace PersonalizedOffersSdk.Offers.ValidationConditions
             return offerUuid;
         }
 
-        private static object ParseFeatureUnlocked(string value)
+        private object ParseFeatureUnlocked(string value)
         {
             return value;
         }

@@ -14,7 +14,7 @@ namespace PersonalizedOffersSdk.Controller
 
         public string GetPriceCurrencyLabel(CurrencyType currencyType)
         {
-            return _currencyTypeToLabel.Find(x => x.currencyType == currencyType).label;
+            return _currencyTypeToLabel.Find(x => x.CurrencyType == currencyType).Label;
         }
 
         public string GetFinalPriceLabel(Price price)

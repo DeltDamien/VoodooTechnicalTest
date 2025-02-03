@@ -34,23 +34,13 @@ namespace PersonalizedOffersSdk.Sample
         private PersonalizedOffersController _personalizedOffersController;
         private SamplePurchaseState _purchaseState = SamplePurchaseState.NonePurchased;
 
+        private const string _offerPopupTitleLabelFallback = "Offer";
+
         private void Start()
         {
-            if (_personalizedOffersSDK == null)
+            if (HasInitialisationErrors())
             {
-                Debug.LogError("PersonalizedOffersSDK is not set.");
-                return;
-            }
-
-            if (_startSessionButton == null)
-            {
-                Debug.LogError("Start session button is not set.");
-                return;
-            }
-
-            if (_offersPopup == null)
-            {
-                Debug.LogError("Popup offer is not set.");
+                Debug.Log("At least one error occurred in SampleInteractions, the sample will not work properly.");
                 return;
             }
 
@@ -58,11 +48,43 @@ namespace PersonalizedOffersSdk.Sample
         }
 
 
+        private bool HasInitialisationErrors()
+        {
+            bool hasError = false;
+
+            if (_personalizedOffersSDK == null)
+            {
+                Debug.LogError("PersonalizedOffersSDK is not set.");
+                hasError = true;
+            }
+
+            if (_startSessionButton == null)
+            {
+                Debug.LogError("Start session button is not set.");
+                hasError = true;
+            }
+
+            if (_offersPopup == null)
+            {
+                Debug.LogError("Popup offer is not set.");
+                hasError = true;
+            }
+
+            return hasError;
+        }
+
+
 
         public void OnStartSessionClicked()
         {
-            _offersPopup?.gameObject.SetActive(true);
-            _startSessionButton.gameObject.SetActive(false);
+            if (_offersPopup != null)
+            {
+                _offersPopup.gameObject.SetActive(true);
+            }
+            if (_startSessionButton != null)
+            {
+                _startSessionButton.gameObject.SetActive(false);
+            }
             OnTriggerReceived(TriggerType.SessionStarted);
 
         }
@@ -75,17 +97,17 @@ namespace PersonalizedOffersSdk.Sample
 
                 await _personalizedOffersController.UpdateOffersValidationAsync();
 
-                List<Offer> offers = _personalizedOffersController.GetOffers();
+                IReadOnlyList<Offer> offers = _personalizedOffersController.GetOffers();
 
                 if (offers.Count > 0)
                 {
-                    string offerPopupTitleLabel = _offerTypeLabelMap.OfferTypeToLabel.First(x => x.offerType == offers[0].GetOfferType()).label ?? "Offer";
+                    string offerPopupTitleLabel = _offerTypeLabelMap.OfferTypeToLabel.First(x => x.offerType == offers[0].OfferType).label ?? _offerPopupTitleLabelFallback;
                     _offersPopup.UpdatePopupUI(offerPopupTitleLabel);
 
                     for (int i = 0; i < offers.Count; i++)
                     {
-                        Guid offerGuid = offers[i].GetUuid();
-                        _offersPopup.CreateOffer(offers[i].GetTitle(), offers[i], () =>
+                        Guid offerGuid = offers[i].OfferUuid;
+                        _offersPopup.CreateOffer(offers[i], () =>
                         {
                             OnPurchaseOffer(offerGuid);
                         });

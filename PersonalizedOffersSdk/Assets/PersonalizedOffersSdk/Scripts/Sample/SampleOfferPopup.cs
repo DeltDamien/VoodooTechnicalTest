@@ -22,32 +22,67 @@ namespace PersonalizedOffersSdk.Sample
         private Dictionary<Guid, SampleOfferUI> _guidsToOffersPanelUI = new Dictionary<Guid, SampleOfferUI>();
         private PersonalizedOffersController _personalizedOffersController;
 
+        private const OfferType _fallbackOfferType = OfferType.Regular;
         private void Start()
         {
+            if (HasInitialisationErrors())
+            {
+                Debug.LogError("One or more required fields are not set. The SampleOfferPopup will not work properly.");
+                return;
+            }
+            _personalizedOffersController = _personalizedOffersSDK.GetPersonalizedOffersController();
+        }
+
+        private bool HasInitialisationErrors()
+        {
+            bool hasError = false;
+
+            if (_offerPrefab == null)
+            {
+                Debug.LogError("Offer Prefab is not set.");
+                hasError = true;
+            }
+
+            if (_offersContainer == null)
+            {
+                Debug.LogError("Offers Container is not set.");
+                hasError = true;
+            }
+
+            if (_titleText == null)
+            {
+                Debug.LogError("Title Text is not set.");
+                hasError = true;
+            }
+
             if (_personalizedOffersSDK == null)
             {
                 Debug.LogError("PersonalizedOffersSDK is not set.");
-                return;
+                hasError = true;
             }
-            _personalizedOffersController = _personalizedOffersSDK?.GetPersonalizedOffersController();
+
+            return hasError;
         }
 
         public void UpdatePopupUI(string title)
         {
-            _titleText?.SetText(title);
+            if (_titleText != null)
+            {
+                _titleText.SetText(title);
+            }
         }
 
-        public void CreateOffer(string title, Offer offer, System.Action onPurchased)
+        public void CreateOffer(Offer offer, System.Action onPurchased)
         { 
-            GameObject offerUIObject = GameObject.Instantiate(_offerPrefab, _offersContainer);
+            GameObject offerUIObject = Instantiate(_offerPrefab, _offersContainer);
             SampleOfferUI sampleOfferUI = offerUIObject.GetComponent<SampleOfferUI>();
             
-            if (sampleOfferUI)
+            if (sampleOfferUI != null && _personalizedOffersSDK != null)
             {
-                sampleOfferUI.InjectCurrencyController(_personalizedOffersSDK?.GetCurrencyController());
+                sampleOfferUI.InjectCurrencyController(_personalizedOffersSDK.GetCurrencyController());
                 sampleOfferUI.PopupulateOffer(offer, onPurchased);
             }
-            _guidsToOffersPanelUI.Add(offer.GetUuid(), sampleOfferUI);
+            _guidsToOffersPanelUI.Add(offer.OfferUuid, sampleOfferUI);
             UpdateOffersUI();
         }
 
@@ -65,7 +100,7 @@ namespace PersonalizedOffersSdk.Sample
         {
             foreach(KeyValuePair<Guid, SampleOfferUI> guidToOffer in _guidsToOffersPanelUI)
             {
-                OfferType offerType = _personalizedOffersController?.GetOfferType(guidToOffer.Key) ?? OfferType.Regular;
+                OfferType offerType = _personalizedOffersController?.GetOfferType(guidToOffer.Key) ?? _fallbackOfferType;
                 if (offerType == OfferType.Chained || offerType == OfferType.Endless) {
                     bool IsOfferHasLinkedOffers = _personalizedOffersController.IsOfferHasLinkedOffers(guidToOffer.Key);
                     bool isOfferLinkedOffers = _personalizedOffersController.isOfferLinkedOffers(guidToOffer.Key);

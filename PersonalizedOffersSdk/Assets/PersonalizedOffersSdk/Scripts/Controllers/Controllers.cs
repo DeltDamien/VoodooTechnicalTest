@@ -1,18 +1,19 @@
 using PersonalizedOffersSdk.Offers.Prices;
+using PersonalizedOffersSdk.Offers.ValidationConditions;
 using PersonalizedOffersSdk.Service;
 using System;
 using System.Collections.Generic;
 
 namespace PersonalizedOffersSdk.Controller
 {
-    public struct ControllersData
+    public readonly struct ControllersParameters
     {
         public readonly Guid PlayerUUid;
         public readonly bool ImmediateStartSanityCheck;
         public readonly float CheckInterval;
         public readonly List<CurrencyTypeToLabel> CurrencyTypeToLabels;
 
-        public ControllersData(Guid playerUuid, bool immediateStartSanityCheck, float checkInterval, List<CurrencyTypeToLabel> currencyTypeToLabels)
+        public ControllersParameters(Guid playerUuid, bool immediateStartSanityCheck, float checkInterval, List<CurrencyTypeToLabel> currencyTypeToLabels)
         {
             PlayerUUid = playerUuid;
             ImmediateStartSanityCheck = immediateStartSanityCheck;
@@ -23,33 +24,20 @@ namespace PersonalizedOffersSdk.Controller
 
     public class Controllers
     {
-        private readonly PersonalizedOffersController _personalizedOfferController;
-        private readonly PersonalizedOffersSanityCheckController _personalizedOffersSanityCheckController;
-        private readonly CurrencyController _currencyController;
+        public readonly PersonalizedOffersController PersonalizedOfferController;
+        public readonly PersonalizedOffersSanityCheckController PersonalizedOffersSanityCheckController;
+        public readonly CurrencyController CurrencyController;
+        public readonly ValidationConditionController ValidationConditionController;
 
-        public Controllers(Services services, ControllersData controllersData)
+        public Controllers(Services services, ControllersParameters controllersData)
         {
-            _personalizedOfferController = new PersonalizedOffersController(controllersData.PlayerUUid, services.GetPersonalizedOffersService());
+            PersonalizedOfferController = new PersonalizedOffersController(controllersData.PlayerUUid, services.PersonalizedOffersService);
 
-            _personalizedOffersSanityCheckController = new PersonalizedOffersSanityCheckController(_personalizedOfferController, controllersData.ImmediateStartSanityCheck, controllersData.CheckInterval);
+            PersonalizedOffersSanityCheckController = new PersonalizedOffersSanityCheckController(PersonalizedOfferController, controllersData.ImmediateStartSanityCheck, controllersData.CheckInterval);
 
-            _currencyController = new CurrencyController(controllersData.CurrencyTypeToLabels);
+            CurrencyController = new CurrencyController(controllersData.CurrencyTypeToLabels);
+            ValidationConditionController = new ValidationConditionController();
 
-        }
-
-        public PersonalizedOffersController GetPersonalizedOffersController()
-        {
-            return _personalizedOfferController;
-        }
-
-        public PersonalizedOffersSanityCheckController GetPersonalizedOffersSanityCheckController()
-        {
-            return _personalizedOffersSanityCheckController;
-        }
-
-        public CurrencyController GetCurrencyController()
-        {
-            return _currencyController;
         }
     }
 }

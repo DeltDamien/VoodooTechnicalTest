@@ -3,7 +3,7 @@ namespace PersonalizedOffersSdk.Offers.ValidationConditions
     public enum ValidationConditionType
     {
         TimeLeft = 0,
-        LevelPased,
+        LevelPassed,
         OtherOfferBought,
         FeatureUnlocked,
         ValidConditionTypeCount

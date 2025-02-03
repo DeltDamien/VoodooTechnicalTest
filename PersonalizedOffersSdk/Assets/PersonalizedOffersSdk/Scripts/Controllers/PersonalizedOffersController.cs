@@ -11,19 +11,20 @@ namespace PersonalizedOffersSdk.Controller
 {
     public class PersonalizedOffersController
     {
-        private readonly Guid _playerUuid;
+        public readonly Guid PlayerUuid;
         private readonly IPersonalizedOffersService _personalizedOffersService;
-        // TODO : cache by uuid offers these one to access it faster if needed
+
+        // TODO : cache by uuid offers these one to access it faster if needed, for instance for linked offers find
         private List<Offer> _offers;
 
         public PersonalizedOffersController(Guid playerUuid, IPersonalizedOffersService personalizedOffersService)
         {
             _offers = new List<Offer>();
-            _playerUuid = playerUuid;
+            PlayerUuid = playerUuid;
             _personalizedOffersService = personalizedOffersService;
         }
 
-        public List<Offer> GetOffers()
+        public IReadOnlyList<Offer> GetOffers()
         {
             return _offers;
         }
@@ -32,22 +33,22 @@ namespace PersonalizedOffersSdk.Controller
         #region TriggerReceived
         public async UniTask OnTriggerReceivedAsync(TriggerType trigger)
         {
-            List<OfferData> triggeredOffers = await _personalizedOffersService.GetTriggeredOffersAsync(_playerUuid, trigger);
+            List<OfferDto> triggeredOffers = await _personalizedOffersService.GetTriggeredOffersAsync(PlayerUuid, trigger);
             AddTrigeredOffer(triggeredOffers);
         }
 
-        private void AddTrigeredOffer(List<OfferData> triggeredOffers)
+        private void AddTrigeredOffer(List<OfferDto> triggeredOffers)
         {
             if (triggeredOffers != null)
             {
-                HashSet<Guid> existingOfferUuids = new HashSet<Guid>(_offers.ConvertAll(o => o.GetUuid()));
+                HashSet<Guid> existingOfferUuids = new HashSet<Guid>(_offers.ConvertAll(o => o.OfferUuid));
 
                 // an update on the offer should be a new uuid, but that's open to discussion
                 for (int i = 0; i < triggeredOffers.Count; i++)
                 {
-                    OfferData offerData = triggeredOffers[i];
+                    OfferDto offerData = triggeredOffers[i];
 
-                    if (!existingOfferUuids.Contains(offerData.uuid))
+                    if (!existingOfferUuids.Contains(offerData.OfferUUid))
                     {
                         Offer offer = new Offer(triggeredOffers[i]);
                         _offers.Add(offer);
@@ -61,11 +62,11 @@ namespace PersonalizedOffersSdk.Controller
         public async UniTask<bool> ValidatePurchaseOfferAsync(Guid offerUuid)
         {
             bool isPurchaseValid = false;
-            var offer = _offers.Find(o => o.GetUuid() == offerUuid);
+            var offer = _offers.Find(o => o.OfferUuid == offerUuid);
             if (offer != null)
             {
 
-                isPurchaseValid = await _personalizedOffersService.ValidatePurchaseOfferAsync(_playerUuid, offerUuid);
+                isPurchaseValid = await _personalizedOffersService.ValidatePurchaseOfferAsync(PlayerUuid, offerUuid);
 
 
                 if (isPurchaseValid)
@@ -82,10 +83,10 @@ namespace PersonalizedOffersSdk.Controller
         public async UniTask<bool> CancelledOfferAsync(Guid offerUuid)
         {
             bool isCancelled = false;
-            var offer = _offers.Find(o => o.GetUuid() == offerUuid);
+            var offer = _offers.Find(o => o.OfferUuid == offerUuid);
             if (offer != null)
             {
-                isCancelled = await _personalizedOffersService.CancelledOfferAsync(_playerUuid, offerUuid);
+                isCancelled = await _personalizedOffersService.CancelledOfferAsync(PlayerUuid, offerUuid);
 
                 if (isCancelled)
                 {
@@ -102,7 +103,7 @@ namespace PersonalizedOffersSdk.Controller
         // TODO : maybe an endpoint for one offer or list of offer could be add to optimize this on backend side
         public async UniTask<List<Guid>> GetValidOffersAsync(List<Guid> offersUuid)
         {
-            List<Guid> allValidOffers = await _personalizedOffersService.GetValidOffersAsync(_playerUuid);
+            List<Guid> allValidOffers = await _personalizedOffersService.GetValidOffersAsync(PlayerUuid);
             return offersUuid.FindAll(o => allValidOffers.Contains(o));
         }
 
@@ -114,10 +115,10 @@ namespace PersonalizedOffersSdk.Controller
 
         public async UniTask UpdateOffersValidationAsync()
         {
-            List<Guid> offersUid = await _personalizedOffersService.GetValidOffersAsync(_playerUuid);
+            List<Guid> offersUid = await _personalizedOffersService.GetValidOffersAsync(PlayerUuid);
             HashSet<Guid> validOffersSet = new HashSet<Guid>(offersUid);
 
-            _offers.RemoveAll(offer => !validOffersSet.Contains(offer.GetUuid()));
+            _offers.RemoveAll(offer => !validOffersSet.Contains(offer.OfferUuid));
         }
 
         #endregion
@@ -125,17 +126,28 @@ namespace PersonalizedOffersSdk.Controller
 
         public bool IsOfferHasLinkedOffers(Guid guid)
         {
-            return _offers.Find(o => o.GetUuid() == guid).GetLinkedOffers().Count > 0;
+            return _offers.Find(o => o.OfferUuid == guid).GetLinkedOffers().Count > 0;
         }
 
         public bool isOfferLinkedOffers(Guid guid)
         {
-            return _offers.Find(o => o.GetLinkedOffers().Contains(guid)) != null;
+            for (int i = 0; i < _offers.Count; i++)
+            {
+                var linkedOffers = _offers[i].GetLinkedOffers();
+                for (int j = 0; j < linkedOffers.Count; j++)
+                {
+                    if (linkedOffers[j] == guid)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         public OfferType GetOfferType(Guid guid)
         {
-            return _offers.Find(o => o.GetUuid() == guid).GetOfferType();
+            return _offers.Find(o => o.OfferUuid == guid).OfferType;
         }
 
     }

@@ -8,12 +8,12 @@ namespace PersonalizedOffersSdk.Offers.Prices
     public class CurrencyTypeToLabel
     {
         [SerializeField]
-        public CurrencyType currencyType;
+        public CurrencyType CurrencyType;
         [SerializeField]
-        public string label;
+        public string Label;
     }
 
-    [CreateAssetMenu(fileName = "CurrencyTypeToLabel", menuName = "Scriptable Objects/SOCurrencyTypeToLabel")]
+    [CreateAssetMenu(fileName = "CurrencyTypeToLabel", menuName = "PersonalizedOffersSDK/SO/CurrencyTypeToLabel")]
     public class SOCurrencyTypeToLabel : ScriptableObject
     {
         [SerializeField]

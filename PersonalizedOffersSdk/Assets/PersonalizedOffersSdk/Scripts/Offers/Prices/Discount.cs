@@ -1,8 +1,8 @@
 namespace PersonalizedOffersSdk.Offers.Prices
 {
-    public class Discount
+    public readonly struct Discount
     {
-        public float Percent { get; }
+        public readonly float Percent;
 
         public Discount(float percent)
         {

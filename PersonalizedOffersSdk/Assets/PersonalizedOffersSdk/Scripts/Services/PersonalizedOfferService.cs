@@ -47,13 +47,13 @@ namespace PersonalizedOffersSdk.Service
 
         #region TriggerRequest
 
-        public async UniTask<List<OfferData>> GetTriggeredOffersAsync(Guid playerUuid, TriggerType trigger)
+        public async UniTask<List<OfferDto>> GetTriggeredOffersAsync(Guid playerUuid, TriggerType trigger)
         {
             UnityWebRequest request = CreateRequest(_backendAdress + _triggeredOffersEndpoint, "POST", JsonUtility.ToJson(new TriggeredOffersRequest
-            {
-                playerUuid = playerUuid,
-                trigger = trigger
-            }));
+            (
+                playerUuid,
+                trigger
+            )));
 
              await request.SendWebRequest();
 
@@ -63,8 +63,8 @@ namespace PersonalizedOffersSdk.Service
                 return null;            }
             else
             {
-                TriggeredOffersResponse response = JsonUtility.FromJson<TriggeredOffersResponse>(request.downloadHandler.text);
-                return response.offers.ToList();
+                List<OfferDto> offers = JsonUtility.FromJson<List<OfferDto>>(request.downloadHandler.text);
+                return offers;
             }
         }
 
@@ -75,11 +75,11 @@ namespace PersonalizedOffersSdk.Service
 
         public async UniTask<bool> ValidatePurchaseOfferAsync(Guid playerUuid, Guid offerUuid)
         {
-            UnityWebRequest request = CreateRequest(_backendAdress + _validatePurchaseEndpoint, "POST", JsonUtility.ToJson(new ValidateOfferRequest
-            {
-                playerUuid = playerUuid,
-                offerUuid = offerUuid
-            }));
+            UnityWebRequest request = CreateRequest(_backendAdress + _validatePurchaseEndpoint, "POST", JsonUtility.ToJson(new ValidatePurchaseOfferRequest
+            (
+                playerUuid.ToString(), 
+                offerUuid.ToString()
+            )));
 
             await request.SendWebRequest();
 
@@ -90,8 +90,8 @@ namespace PersonalizedOffersSdk.Service
             }
             else
             {
-                ValidateOfferResponse response = JsonUtility.FromJson<ValidateOfferResponse>(request.downloadHandler.text);
-                return response.success;
+                bool success = JsonUtility.FromJson<bool>(request.downloadHandler.text);
+                return success;
             }
         }
 
@@ -103,10 +103,10 @@ namespace PersonalizedOffersSdk.Service
         public async UniTask<bool> CancelledOfferAsync(Guid playerUuid, Guid offerUuid)
         {
             UnityWebRequest request = CreateRequest(_backendAdress + _cancelOfferEndpoint, "POST", JsonUtility.ToJson(new CancelledOfferRequest
-            {
-                playerUuid = playerUuid.ToString(),
-                offerUuid = offerUuid.ToString()
-            }));
+            (
+                playerUuid.ToString(),
+                offerUuid.ToString()
+            )));
 
             await request.SendWebRequest();
 
@@ -117,8 +117,8 @@ namespace PersonalizedOffersSdk.Service
             }
             else
             {
-                CancelledOfferResponse response = JsonUtility.FromJson<CancelledOfferResponse>(request.downloadHandler.text);
-                return response.success;
+                bool success = JsonUtility.FromJson<bool>(request.downloadHandler.text);
+                return success;
             }
         }
 
@@ -137,8 +137,8 @@ namespace PersonalizedOffersSdk.Service
             }
             else
             {
-                ValidOffersResponse response = JsonUtility.FromJson<ValidOffersResponse>(request.downloadHandler.text);
-                return response.offersUuid.ToList();
+                List<Guid> validOffersUuid = JsonUtility.FromJson<List<Guid>>(request.downloadHandler.text);
+                return validOffersUuid;
             }
         }
 

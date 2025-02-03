@@ -2,7 +2,7 @@ using System;
 
 namespace PersonalizedOffersSdk.Offers.Prices
 {
-    public class Price
+    public readonly struct Price
     {
         public readonly CurrencyType CurrencyType;
         public readonly float Amount;
@@ -15,12 +15,7 @@ namespace PersonalizedOffersSdk.Offers.Prices
             _discount = new Discount(discountPercent);
         }
 
-        public Price(PriceData priceData)
-            : this(priceData.currencyType, priceData.amount, priceData.discountPercent) {
-        }
-
         public string GetDiscountLabel() => _discount.GetDiscountLabel();
-
         public float GetFinalPrice() => _discount.CalculateFinalPriceAmount(Amount);
         public float GetDiscountPercent() => _discount.Percent;
     }

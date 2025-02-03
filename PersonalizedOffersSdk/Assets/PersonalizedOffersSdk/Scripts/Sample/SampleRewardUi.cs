@@ -9,7 +9,7 @@ public class SampleRewardUi : MonoBehaviour
 
     public void PopulateReward(Sprite rewardIcon ,string amountText)
     {
-        rewardIcon = _rewardIcon.sprite;
+        _rewardIcon.sprite = rewardIcon;
         _rewardAmount.text = amountText;
     }
 }

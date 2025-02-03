@@ -15,7 +15,7 @@ namespace PersonalizedOffersSdk.Scripts.Sample
     }
 
 
-    [CreateAssetMenu(fileName = "TriggerTypeLabelMap", menuName = "Scriptable Objects/SOTriggerTypeLabelMap")]
+    [CreateAssetMenu(fileName = "TriggerTypeLabelMap", menuName = "PersonalizedOffersSDK/SO/TriggerTypeLabelMap")]
     public class SOOfferTypeLabelMap : ScriptableObject
     {
         [SerializeField]

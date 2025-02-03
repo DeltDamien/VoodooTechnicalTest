@@ -25,7 +25,7 @@ namespace PersonalizedOffersSdk.Tests
             Guid playerUuid = Guid.NewGuid();
             TriggerType trigger = TriggerType.SessionStarted;
 
-            List<OfferData> result = _mockService.GetTriggeredOffersAsync(playerUuid, trigger).AsTask().Result;
+            List<OfferDto> result = _mockService.GetTriggeredOffersAsync(playerUuid, trigger).AsTask().Result;
 
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Count == 1, "One offer should be triggered");
@@ -37,7 +37,7 @@ namespace PersonalizedOffersSdk.Tests
             Guid playerUuid = Guid.NewGuid();
             TriggerType trigger = TriggerType.OfferPurchased;
 
-            List<OfferData> result = _mockService.GetTriggeredOffersAsync(playerUuid, trigger).AsTask().Result;
+            List<OfferDto> result = _mockService.GetTriggeredOffersAsync(playerUuid, trigger).AsTask().Result;
 
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Count == 2, "Two offer should be triggered");
@@ -47,7 +47,7 @@ namespace PersonalizedOffersSdk.Tests
         public void ValidatePurchaseOfferAsync_ReturnsTrueForValidOffer()
         {
             Guid playerUuid = Guid.NewGuid();
-            Guid validOfferUuid = _mockService.GetTriggeredOffersAsync(playerUuid, TriggerType.SessionStarted).AsTask().Result[0].uuid;
+            Guid validOfferUuid = _mockService.GetTriggeredOffersAsync(playerUuid, TriggerType.SessionStarted).AsTask().Result[0].OfferUUid;
 
             bool result = _mockService.ValidatePurchaseOfferAsync(playerUuid, validOfferUuid).AsTask().Result;
 
@@ -59,7 +59,7 @@ namespace PersonalizedOffersSdk.Tests
         public void CancelledOfferAsync_ReturnsTrueForValidOffer()
         {
             Guid playerUuid = Guid.NewGuid();
-            Guid validOfferUuid = _mockService.GetTriggeredOffersAsync(playerUuid, TriggerType.SessionStarted).AsTask().Result[0].uuid;
+            Guid validOfferUuid = _mockService.GetTriggeredOffersAsync(playerUuid, TriggerType.SessionStarted).AsTask().Result[0].OfferUUid;
 
             bool result = _mockService.CancelledOfferAsync(playerUuid, validOfferUuid).AsTask().Result;
 

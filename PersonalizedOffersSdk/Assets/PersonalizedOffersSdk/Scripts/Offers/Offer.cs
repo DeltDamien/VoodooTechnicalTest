@@ -9,48 +9,36 @@ namespace PersonalizedOffersSdk.Offers
 
     public class Offer
     {
-            private readonly Guid _uuid;
-            private readonly string _title;
-            private readonly string _description;
-            public readonly Price Price;
-            private readonly List<Reward> _rewards;
-            private readonly List<ValidationCondition> _validationConditions;
-            private readonly DateTime _startTime;
-            private readonly OfferType _offerType;
+        public readonly Guid OfferUuid;
+        public readonly string Title;
+        public readonly string Description;
+        public readonly Price Price;
+        public readonly List<Reward> Rewards;
+        public readonly List<ValidationCondition> ValidationCondition;
+        public readonly DateTime StartTime;
+        public readonly OfferType OfferType;
 
-            private List<Guid> _linkedOffers;
+        private List<Guid> _linkedOffers;
+        private OfferCachedState _cachedState;
 
-            private OfferCachedState _cachedState;
-
-        public Offer(OfferData offerData)
+        public Offer(OfferDto offerData)
         {
-            _uuid = offerData.uuid;
-            _title = offerData.title;
-            _description = offerData.description;
-            Price = new Price(offerData.price);
-            _rewards = new List<Reward>();
-            _offerType = offerData.offerType;
-            foreach (var rewardData in offerData.rewards)
-            {
-                _rewards.Add(new Reward(rewardData));
-            }
+            OfferUuid = offerData.OfferUUid;
+            Title = offerData.Title;
+            Description = offerData.Description;
 
-            _validationConditions = new List<ValidationCondition>();
-            foreach (var validationConditionData in offerData.validationConditions)
-            {
-                _validationConditions.Add(new ValidationCondition(validationConditionData));
-            }
+            Price = offerData.Price;
 
-            _startTime = offerData.startTime;
-            _linkedOffers = new List<Guid>(offerData.linkedOffers);
+            Rewards = new List<Reward>();
+            OfferType = offerData.OfferType;
+            Rewards = offerData.Rewards;
+
+            ValidationCondition = offerData.ValidationConditions;
+            StartTime = offerData.StartTime;
+            _linkedOffers = new List<Guid>(offerData.LinkedOffers);
             _cachedState = new OfferCachedState(false, false);
         }
 
-        public Guid GetUuid() => _uuid;
-        public string GetTitle() => _title;
-        public string GetDescription() => _description;
-        public List<Reward> GetRewards() => _rewards;
-        public OfferType GetOfferType() => _offerType;
         public void MarkAsBought()
         {
             _cachedState.MarkAsBought();
@@ -58,7 +46,7 @@ namespace PersonalizedOffersSdk.Offers
         }
         public void MarkAsConditionMet() => _cachedState.MarkAsConditionMet();
 
-        public List<Guid> GetLinkedOffers() => _linkedOffers;
+        public IReadOnlyList<Guid> GetLinkedOffers() => _linkedOffers;
 
         public float GetDiscountPercent() => Price.GetDiscountPercent();
         public string GetDiscountLabel() => Price.GetDiscountLabel();

@@ -1,30 +1,14 @@
 namespace PersonalizedOffersSdk.Offers.ValidationConditions
 {
-    public class ValidationCondition
+    public readonly struct ValidationCondition
     {
-        private readonly ValidationConditionType _type;
-        private readonly string _value;
+        public readonly ValidationConditionType ValidationConditionType;
+        public readonly string Value;
 
         public ValidationCondition(ValidationConditionType type, string value)
         {
-            _type = type;
-            _value = value;
-        }
-
-        public ValidationCondition(ValidationConditionData validationConditionData)
-        {
-            _type = validationConditionData.validationConditionType;
-            _value = validationConditionData.value;
-        }
-
-        public ValidationConditionType GetConditionType()
-        {
-            return _type;
-        }
-
-        public string GetConditionValue()
-        {
-            return _value;
+            ValidationConditionType = type;
+            Value = value;
         }
     }
 }

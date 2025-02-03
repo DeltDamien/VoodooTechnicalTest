@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PersonalizedOffersSdk
 {
-    [CreateAssetMenu(fileName = "PersonalizedOffersParameters", menuName = "Scriptable Objects/PersonalizedOffersParameters")]
+    [CreateAssetMenu(fileName = "PersonalizedOffersParameters", menuName = "PersonalizedOffersSDK/SO/PersonalizedOffersParameters")]
     public class PersonalizedOffersParameters : ScriptableObject
     {
         [SerializeField] private string _backendAdress;

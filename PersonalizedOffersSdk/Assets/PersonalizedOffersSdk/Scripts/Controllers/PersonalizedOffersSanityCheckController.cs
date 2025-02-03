@@ -6,10 +6,10 @@ namespace PersonalizedOffersSdk.Controller
 {
     public class PersonalizedOffersSanityCheckController
     {
-        private PersonalizedOffersController _personalizedOfferController;
+        private readonly PersonalizedOffersController _personalizedOfferController;
 
         // our game could have an internal timer system which call our backend (or not) we should use 
-        private Timer _timer;
+        private readonly Timer _timer;
 
         public PersonalizedOffersSanityCheckController(PersonalizedOffersController personalizedOfferController, bool immediateStartSanityCheck, float checkInterval)
         {

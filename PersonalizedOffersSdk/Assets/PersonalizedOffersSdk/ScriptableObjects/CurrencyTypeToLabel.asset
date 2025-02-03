@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: CurrencyTypeToLabel
   m_EditorClassIdentifier: 
   _currencyTypeToLabel:
-  - currencyType: 0
-    label: Soft Currency
-  - currencyType: 1
-    label: Hard Currency
-  - currencyType: 2
-    label: "\u20AC"
-  - currencyType: 3
-    label: $
-  - currencyType: 4
-    label: "\xA3"
+  - CurrencyType: 0
+    Label: Soft Currency
+  - CurrencyType: 1
+    Label: Hard Currency
+  - CurrencyType: 2
+    Label: "\u20AC"
+  - CurrencyType: 3
+    Label: $
+  - CurrencyType: 4
+    Label: "\xA3"

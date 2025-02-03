@@ -7,28 +7,28 @@ namespace PersonalizedOffersSdk
 {
     public class PersonalizedOffersSDK : MonoBehaviour
     {
+
+
         [SerializeField]
         private bool _isDebugMode;
         [SerializeField]
         private PersonalizedOffersParameters personalizedOffersParameters;
 
-        private Services _services;
         private Controllers _controllers;
-        private Guid _authToken;
-        private Guid _playerGuid;
+        private Services _services;
 
         private void Awake()
         {
             // TODO : get the token from an auth backend
-            _authToken = Guid.NewGuid();
+            Guid authToken = Guid.NewGuid();
 
             // TODO : get the player uuid from the game (probable get by another backend, or gmail/facebook/apple)
-            _playerGuid = Guid.NewGuid();
+            Guid playerGuid = Guid.NewGuid();
 
 
-            _services = new Services(_authToken, personalizedOffersParameters.BackendAdress, _isDebugMode);
-            _controllers = new Controllers(_services, new ControllersData(
-                 _playerGuid,
+            _services = new Services(authToken, personalizedOffersParameters.BackendAdress, _isDebugMode);
+            _controllers = new Controllers(_services, new ControllersParameters(
+                playerGuid,
                 personalizedOffersParameters.ImmediateStartSanityCheck,
                 personalizedOffersParameters.SanityCheckPeriodInSecond,
                 personalizedOffersParameters.CurrencyTypeToLabel.CurrencyTypeToLabel
@@ -37,17 +37,17 @@ namespace PersonalizedOffersSdk
 
         public PersonalizedOffersController GetPersonalizedOffersController()
         {
-            return _controllers.GetPersonalizedOffersController();
+            return _controllers.PersonalizedOfferController;
         }
 
         public CurrencyController GetCurrencyController()
         {
-            return _controllers.GetCurrencyController();
+            return _controllers.CurrencyController;
         }
 
         public PersonalizedOffersSanityCheckController GetPersonalizedOffersSanityCheckController()
         {
-            return _controllers.GetPersonalizedOffersSanityCheckController();
+            return _controllers.PersonalizedOffersSanityCheckController;
         }
     }
 }

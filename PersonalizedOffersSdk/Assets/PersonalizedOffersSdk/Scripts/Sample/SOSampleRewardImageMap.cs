@@ -16,7 +16,7 @@ namespace PersonalizedOffersSdk.Scripts.Sample
 
     // TODO : label should be key for localization
     // Resources should have a sprite linked to to use it instead of a string for hard and soft currency
-    [CreateAssetMenu(fileName = "SampleRewardImageMap", menuName = "Scriptable Objects/SampleRewardImageMap")]
+    [CreateAssetMenu(fileName = "SampleRewardImageMap", menuName = "PersonalizedOffersSDK/SO/SampleRewardImageMap")]
     public class SOSampleRewardImageMap : ScriptableObject
     {
         [SerializeField] 
