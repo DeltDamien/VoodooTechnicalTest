@@ -18,14 +18,36 @@ namespace PersonalizedOffersSdk.Offers.Prices
         public Price(PriceData priceData)
             : this(new Currency(priceData.currencyType), priceData.amount, priceData.discountPercent) { }
 
-        public string GetFinalPriceLabel() => $"{GetFinalPrice()} {_currency.GetPriceCurrencyLabel()}";
+        public string GetFinalPriceLabel ()
+        {
+            if (_amount > 0)
+            {
+               return $"{GetFinalPrice()} {_currency.GetPriceCurrencyLabel()}";
+            } 
+            else
+            {
+                return "Free";
+            }
+        }
 
-        public string GetOriginalPriceLabel() => $"{_amount} {_currency.GetPriceCurrencyLabel()}";
+        public string GetOriginalPriceLabel ()
+        {
+            if (_amount > 0)
+            {
+                return $"{_amount} {_currency.GetPriceCurrencyLabel()}";
+            }
+            else
+            {
+                return "Free";
+            }
+        }
 
         public string GetDiscountLabel() => _discount.GetDiscountLabel();
 
         public float GetFinalPrice() => _discount.CalculateFinalPriceAmount(_amount);
 
         public float GetOriginalPrice() => _amount;
+
+        public float GetDiscountPercent() => _discount.Percent;
     }
 }

@@ -2,26 +2,26 @@ namespace PersonalizedOffersSdk.Offers.Prices
 {
     public class Discount
     {
-        public float Percentage { get; }
+        public float Percent { get; }
 
-        public Discount(float percentage)
+        public Discount(float percent)
         {
-            Percentage = percentage;
+            Percent = percent;
         }
 
         public string GetDiscountLabel()
         {
-            return $"{Percentage}% off";
+            return $"{Percent}% off !";
         }
 
         public float CalculateFinalPriceAmount(float originalPrice)
         {
-            return originalPrice - (originalPrice * Percentage / 100);
+            return originalPrice - (originalPrice * Percent / 100);
         }
 
         public bool IsDiscountApplicable(float originalPrice)
         {
-            return originalPrice > 0 && Percentage > 0;
+            return originalPrice > 0 && Percent > 0;
         }
     }
 }

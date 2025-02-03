@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PersonalizedOffersParameters
   m_EditorClassIdentifier: 
   _backendAdress: https::/perso-offer/api/
-  _immediateStartSanityCheck: 1
+  _immediateStartSanityCheck: 0
   _sanityCheckPeriodInSecond: 10

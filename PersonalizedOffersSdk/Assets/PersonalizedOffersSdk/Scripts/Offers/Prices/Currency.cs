@@ -12,9 +12,9 @@ namespace PersonalizedOffersSdk.Offers.Prices
         {
             { CurrencyType.SoftCurrency, "Soft Currency" },
             { CurrencyType.HardCurrency, "Hard Currency" },
-            { CurrencyType.EUR, "Euro" },
-            { CurrencyType.USD, "US Dollar" },
-            { CurrencyType.GBP, "British Pound" }
+            { CurrencyType.EUR, "€" },
+            { CurrencyType.USD, "$" },
+            { CurrencyType.GBP, "£" }
         };
 
         public Currency(CurrencyType currencyType)

@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using PersonalizedOffersSdk.Offers;
 using PersonalizedOffersSdk.Scripts.Sample;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 
 namespace PersonalizedOffersSdk.Sample
 {
@@ -67,58 +68,60 @@ namespace PersonalizedOffersSdk.Sample
 
         }
 
-        private void OnTriggerReceived(TriggerType triggerType)
+        private async void OnTriggerReceived(TriggerType triggerType)
         {
-            Debug.Log(triggerType.ToString());
-            _personalizedOffersController?.OnTriggerReceived(triggerType);
-            List<Offer> offers = _personalizedOffersController.GetOffers();
-
-            if (offers.Count > 0)
+            if (_personalizedOffersController != null)
             {
-                string offerPopupTitleLabel = _offerTypeLabelMap.OfferTypeToLabel.First(x => x.offerType == offers[0].GetOfferType()).label ?? "Offer";
-                _offersPopup.UpdatePopupUI(offerPopupTitleLabel);
+                await _personalizedOffersController.OnTriggerReceivedAsync(triggerType);
 
-                for (int i = 0; i < offers.Count; i++)
+                await _personalizedOffersController.UpdateOffersValidationAsync();
+
+                List<Offer> offers = _personalizedOffersController.GetOffers();
+
+                if (offers.Count > 0)
                 {
-                    Guid offerGuid = offers[i].GetUuid();
-                    _offersPopup.CreateOffer(offers[i].GetTitle(), offers[i], () =>
+                    string offerPopupTitleLabel = _offerTypeLabelMap.OfferTypeToLabel.First(x => x.offerType == offers[0].GetOfferType()).label ?? "Offer";
+                    _offersPopup.UpdatePopupUI(offerPopupTitleLabel);
+
+                    for (int i = 0; i < offers.Count; i++)
                     {
-                        OnPurchaseOffer(offerGuid);
-                    });
+                        Guid offerGuid = offers[i].GetUuid();
+                        _offersPopup.CreateOffer(offers[i].GetTitle(), offers[i], () =>
+                        {
+                            OnPurchaseOffer(offerGuid);
+                        });
+                    }
                 }
             }
         }
 
-        private void OnPurchaseOffer(Guid offerUuid)
+        private async void OnPurchaseOffer(Guid offerUuid)
         {
+            // a validation could be here, but for the sake of the sample we are going to assume that the purchase is valid
+            // await _personalizedOffersController.ValidatePurchaseOffer(offerUuid);
             // Should call here purchase controller which call iap unity sdk then store the purchase backend
             // let's consider that the purchase is successful
-            _personalizedOffersController.ValidatePurchaseOffer(offerUuid);
-
+            await _personalizedOffersController.ValidatePurchaseOfferAsync(offerUuid);
             _offersPopup.RemoveOffer(offerUuid);
 
             ++_purchaseState;
 
-            if (_purchaseState == SamplePurchaseState.RegularPurchased)
-            {
-                _startSessionButton.gameObject.SetActive(true);
-                _offersPopup.gameObject.SetActive(false);
-                _purchaseState = SamplePurchaseState.NonePurchased;
-            }
-      
-            //if (_purchaseState < SamplePurchaseState.FirstChainedPurchased)
-            //{
-            //    OnTriggerReceived(TriggerType.OfferPurchased);
-            //} else
-            //{
-            //    if (_purchaseState == SamplePurchaseState.SecondChainedPurchased)
-            //    {
-            //        _startSessionButton.gameObject.SetActive(true);
-            //        _popupOffer.gameObject.SetActive(false);
-            //        _purchaseState = SamplePurchaseState.NonePurchased;
-            //    }
-            //}
 
+            if (_purchaseState < SamplePurchaseState.FirstChainedPurchased)
+            {
+                OnTriggerReceived(TriggerType.OfferPurchased);
+            }
+            else
+            {
+                if (_purchaseState == SamplePurchaseState.SecondChainedPurchased)
+                {
+                    _startSessionButton.gameObject.SetActive(true);
+                    _offersPopup.gameObject.SetActive(false);
+                    _purchaseState = SamplePurchaseState.NonePurchased;
+                    await _personalizedOffersController.UpdateOffersValidationAsync();
+                }
+                _offersPopup.UpdateOffersUI();
+            }
         }
     }
 }

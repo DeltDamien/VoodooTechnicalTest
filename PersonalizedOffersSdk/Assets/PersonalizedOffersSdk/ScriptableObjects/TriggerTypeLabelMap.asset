@@ -16,4 +16,4 @@ MonoBehaviour:
   - offerType: 0
     label: Offer !
   - offerType: 1
-    label: Chained offer !
+    label: Chained !

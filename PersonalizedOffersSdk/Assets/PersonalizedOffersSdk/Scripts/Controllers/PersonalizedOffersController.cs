@@ -30,15 +30,9 @@ namespace PersonalizedOffersSdk.Controller
 
 
         #region TriggerReceived
-        public async UniTaskVoid OnTriggerReceivedAsync(TriggerType trigger)
+        public async UniTask OnTriggerReceivedAsync(TriggerType trigger)
         {
             List<OfferData> triggeredOffers = await _personalizedOffersService.GetTriggeredOffersAsync(_playerUuid, trigger);
-            AddTrigeredOffer(triggeredOffers);
-        }
-
-        public void OnTriggerReceived(TriggerType trigger)
-        {
-            List<OfferData> triggeredOffers = _personalizedOffersService.GetTriggeredOffers(_playerUuid, trigger);
             AddTrigeredOffer(triggeredOffers);
         }
 
@@ -69,12 +63,6 @@ namespace PersonalizedOffersSdk.Controller
             return await ValidatePurchaseOfferInternal(offerUuid, true);
         }
 
-        public bool ValidatePurchaseOffer(Guid offerUuid)
-        {
-            _offers.Find(o => o.GetUuid() == offerUuid).MarkAsBought();
-            return ValidatePurchaseOfferInternal(offerUuid, false).GetAwaiter().GetResult();
-        }
-
         private async UniTask<bool> ValidatePurchaseOfferInternal(Guid offerUuid, bool isAsync)
         {
             bool isPurchaseValid = false;
@@ -87,7 +75,7 @@ namespace PersonalizedOffersSdk.Controller
                     : _personalizedOffersService.ValidatePurchaseOffer(_playerUuid, offerUuid);
 
                 if (isPurchaseValid)
-                {
+                {            
                     offer.MarkAsBought();
                 }
             }
@@ -100,11 +88,6 @@ namespace PersonalizedOffersSdk.Controller
         public async UniTask<bool> CancelledOfferAsync(Guid offerUuid)
         {
             return await CancelledOfferInternal(offerUuid, true);
-        }
-
-        public bool CancelledOffer(Guid offerUuid)
-        {
-            return CancelledOfferInternal(offerUuid, false).GetAwaiter().GetResult();
         }
 
         private async UniTask<bool> CancelledOfferInternal(Guid offerUuid, bool isAsync)
@@ -136,41 +119,37 @@ namespace PersonalizedOffersSdk.Controller
             return offersUuid.FindAll(o => allValidOffers.Contains(o));
         }
 
-        public List<Guid> GetValidOffers(List<Guid> offersUuid)
-        {
-            List<Guid> allValidOffers = _personalizedOffersService.GetValidOffers(_playerUuid);
-            return offersUuid.FindAll(o => allValidOffers.Contains(o));
-        }
-
         public async UniTask<bool> IsOfferValidAsync(Guid offerGuid)
         {
            List<Guid> validOffers =  await GetValidOffersAsync(new List<Guid>() { offerGuid});
             return validOffers.Contains(offerGuid);
         }
 
-        public bool IsOfferValid(Guid offerGuid)
-        {
-            List<Guid> validOffers = GetValidOffers(new List<Guid>() { offerGuid });
-            return validOffers.Contains(offerGuid);
-        }
-
         public async UniTask UpdateOffersValidationAsync()
         {
 
-            HashSet<Guid> validOfferSet = new HashSet<Guid>(await _personalizedOffersService.GetValidOffersAsync(_playerUuid));
+            HashSet<Guid> validOffersSet = new HashSet<Guid>(await _personalizedOffersService.GetValidOffersAsync(_playerUuid));
 
-            _offers.RemoveAll(offer => !validOfferSet.Contains(offer.GetUuid()));
+            _offers.RemoveAll(offer => !validOffersSet.Contains(offer.GetUuid()));
         }
-
-        public void UpdateOffersValidation()
-        {
-            HashSet<Guid> validOfferSet = new HashSet<Guid>(_personalizedOffersService.GetValidOffers(_playerUuid));
-
-            _offers.RemoveAll(offer => !validOfferSet.Contains(offer.GetUuid()));
-        }
-
 
         #endregion
+
+
+        public bool IsOfferHasLinkedOffers(Guid guid)
+        {
+            return _offers.Find(o => o.GetUuid() == guid).GetLinkedOffers().Count > 0;
+        }
+
+        public bool isOfferLinkedOffers(Guid guid)
+        {
+            return _offers.Find(o => o.GetLinkedOffers().Contains(guid)) != null;
+        }
+
+        public OfferType GetOfferType(Guid guid)
+        {
+            return _offers.Find(o => o.GetUuid() == guid).GetOfferType();
+        }
 
     }
 }

@@ -27,6 +27,14 @@ namespace PersonalizedOffersSdk.Sample
         private Sprite _fallbackImage;
         [SerializeField]
         private Transform _rewardItemContainer;
+        [SerializeField]
+        private GameObject _arrowImage;
+        [SerializeField]
+        private GameObject _disablePanelImage;
+        [SerializeField]
+        private GameObject _discountImage;
+        [SerializeField]
+        private TextMeshProUGUI _discountText;
 
         public void PopupulateOffer(Offer offer, Action onPurchased)
         {
@@ -48,6 +56,37 @@ namespace PersonalizedOffersSdk.Sample
                     sampleRewardUi.PopulateReward(sprite, rewards[i].GetAmount().ToString());
                 }
             }
+                
+          
+            if (offer.GetDiscountPercent() > 0)
+            {
+                string offerLabel = offer.GetDiscountLabel();
+                _discountImage.SetActive(true);
+                _discountText.text = offerLabel;
+            }
+        }
+
+        public void DisplayLinkedArrow()
+        {
+            _arrowImage?.SetActive(true);
+        }
+
+        public void HideDisplayLinkedArrow()
+        {
+            _arrowImage?.SetActive(false);
+        }
+
+        public void DisplayDisablePanel()
+        {
+            _disablePanelImage?.SetActive(true);
+            _purchaseButton.interactable = false;
+
+        }
+
+        public void HideDisablePanel()
+        {
+            _disablePanelImage?.SetActive(false);
+            _purchaseButton.interactable = true;
         }
     }
 }

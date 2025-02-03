@@ -42,7 +42,7 @@ namespace PersonalizedOffersSdk.Offers
             }
 
             _startTime = offerData.startTime;
-            _linkedOffers = offerData.linkedOffers;
+            _linkedOffers = new List<Guid>(offerData.linkedOffers);
             _cachedState = new OfferCachedState(false, false);
         }
 
@@ -52,8 +52,17 @@ namespace PersonalizedOffersSdk.Offers
         public string GetFinalPriceLabel() => _price.GetFinalPriceLabel();
         public List<Reward> GetRewards() => _rewards;
         public OfferType GetOfferType() => _offerType;
-        public void MarkAsBought() => _cachedState.MarkAsBought();
+        public void MarkAsBought()
+        {
+            _cachedState.MarkAsBought();
+            _linkedOffers.Clear();
+        }
         public void MarkAsConditionMet() => _cachedState.MarkAsConditionMet();
+
+        public List<Guid> GetLinkedOffers() => _linkedOffers;
+
+        public float GetDiscountPercent() => _price.GetDiscountPercent();
+        public string GetDiscountLabel() => _price.GetDiscountLabel();
 
     }
 }
