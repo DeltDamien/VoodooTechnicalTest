@@ -18,8 +18,8 @@ namespace PersonalizedOffersSdk.Offers
         public readonly DateTime StartTime;
         public readonly OfferType OfferType;
 
-        private List<Guid> _linkedOffers;
-        private OfferCachedState _cachedState;
+        private readonly List<Guid> _linkedOffers;
+        private readonly OfferCachedState _cachedState;
 
         public Offer(OfferDto offerData)
         {

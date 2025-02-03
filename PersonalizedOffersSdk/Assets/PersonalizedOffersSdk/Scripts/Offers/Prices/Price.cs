@@ -2,7 +2,7 @@ using System;
 
 namespace PersonalizedOffersSdk.Offers.Prices
 {
-    public readonly struct Price
+    public struct Price
     {
         public readonly CurrencyType CurrencyType;
         public readonly float Amount;
@@ -12,11 +12,43 @@ namespace PersonalizedOffersSdk.Offers.Prices
         {
             CurrencyType = currencyType;
             Amount = amount;
-            _discount = new Discount(discountPercent);
+            if (discountPercent > 0)
+            {
+                _discount = new Discount(discountPercent);
+            }
+            else
+            {
+                _discount = null;
+            }
         }
 
-        public string GetDiscountLabel() => _discount.GetDiscountLabel();
-        public float GetFinalPrice() => _discount.CalculateFinalPriceAmount(Amount);
-        public float GetDiscountPercent() => _discount.Percent;
+        public readonly bool HasDiscount() => _discount != null;
+
+        public readonly string GetDiscountLabel()
+        {
+            if (HasDiscount())
+            {
+                return _discount.GetDiscountLabel();
+            }
+            return string.Empty;
+        }
+
+        public readonly float GetFinalPrice()
+        {
+            if (HasDiscount())
+            {
+                return _discount.CalculateFinalPriceAmount(Amount);
+            }
+            return Amount;
+        }
+
+        public readonly float GetDiscountPercent()
+        {
+            if (HasDiscount())
+            {
+                return _discount.Percent;
+            }
+            return 0;
+        }
     }
 }

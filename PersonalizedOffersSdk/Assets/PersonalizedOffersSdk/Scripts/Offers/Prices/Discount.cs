@@ -1,6 +1,6 @@
 namespace PersonalizedOffersSdk.Offers.Prices
 {
-    public readonly struct Discount
+    public class Discount
     {
         public readonly float Percent;
 
@@ -19,10 +19,6 @@ namespace PersonalizedOffersSdk.Offers.Prices
             return originalPrice - (originalPrice * Percent / 100);
         }
 
-        public bool IsDiscountApplicable(float originalPrice)
-        {
-            return originalPrice > 0 && Percent > 0;
-        }
     }
 }
 
