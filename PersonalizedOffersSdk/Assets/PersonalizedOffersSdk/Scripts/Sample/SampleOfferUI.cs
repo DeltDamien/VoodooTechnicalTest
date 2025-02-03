@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using PersonalizedOffersSdk.Scripts.Sample;
 using System;
 using UnityEngine.UI;
+using PersonalizedOffersSdk.Controller;
 
 namespace PersonalizedOffersSdk.Sample
 {
@@ -36,18 +37,24 @@ namespace PersonalizedOffersSdk.Sample
         [SerializeField]
         private TextMeshProUGUI _discountText;
 
+        private CurrencyController _currencyController;
+
+        public void InjectCurrencyController(CurrencyController currencyController)
+        {
+            _currencyController = currencyController;
+        }
+
         public void PopupulateOffer(Offer offer, Action onPurchased)
         {
             _offerTitle.text = offer.GetTitle();
             _offerDescription.text = offer.GetDescription();
-            _offerPrice.text = offer.GetFinalPriceLabel();
+            _offerPrice.text = _currencyController.GetFinalPriceLabel(offer.Price);
             _purchaseButton.onClick.AddListener(() => onPurchased?.Invoke());
 
             List<Reward> rewards = offer.GetRewards();
 
             for(int i = 0; i < rewards.Count; i++)
             {
-               
                 GameObject rewardItem = Instantiate(_rewardItemPrefab, _rewardItemContainer);
                 SampleRewardUi sampleRewardUi = rewardItem.GetComponent<SampleRewardUi>();
                 if (sampleRewardUi)

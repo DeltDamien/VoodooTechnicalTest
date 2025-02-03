@@ -12,7 +12,7 @@ namespace PersonalizedOffersSdk.Offers
             private readonly Guid _uuid;
             private readonly string _title;
             private readonly string _description;
-            private readonly Price _price;
+            public readonly Price Price;
             private readonly List<Reward> _rewards;
             private readonly List<ValidationCondition> _validationConditions;
             private readonly DateTime _startTime;
@@ -27,7 +27,7 @@ namespace PersonalizedOffersSdk.Offers
             _uuid = offerData.uuid;
             _title = offerData.title;
             _description = offerData.description;
-            _price = new Price(offerData.price);
+            Price = new Price(offerData.price);
             _rewards = new List<Reward>();
             _offerType = offerData.offerType;
             foreach (var rewardData in offerData.rewards)
@@ -49,7 +49,6 @@ namespace PersonalizedOffersSdk.Offers
         public Guid GetUuid() => _uuid;
         public string GetTitle() => _title;
         public string GetDescription() => _description;
-        public string GetFinalPriceLabel() => _price.GetFinalPriceLabel();
         public List<Reward> GetRewards() => _rewards;
         public OfferType GetOfferType() => _offerType;
         public void MarkAsBought()
@@ -61,8 +60,8 @@ namespace PersonalizedOffersSdk.Offers
 
         public List<Guid> GetLinkedOffers() => _linkedOffers;
 
-        public float GetDiscountPercent() => _price.GetDiscountPercent();
-        public string GetDiscountLabel() => _price.GetDiscountLabel();
+        public float GetDiscountPercent() => Price.GetDiscountPercent();
+        public string GetDiscountLabel() => Price.GetDiscountLabel();
 
     }
 }

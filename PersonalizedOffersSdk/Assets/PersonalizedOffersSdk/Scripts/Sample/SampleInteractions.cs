@@ -32,7 +32,6 @@ namespace PersonalizedOffersSdk.Sample
         private SOOfferTypeLabelMap _offerTypeLabelMap;
 
         private PersonalizedOffersController _personalizedOffersController;
-        private bool isChainedOfferDisplayed = false;
         private SamplePurchaseState _purchaseState = SamplePurchaseState.NonePurchased;
 
         private void Start()

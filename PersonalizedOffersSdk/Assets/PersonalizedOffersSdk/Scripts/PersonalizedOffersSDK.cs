@@ -27,12 +27,27 @@ namespace PersonalizedOffersSdk
 
 
             _services = new Services(_authToken, personalizedOffersParameters.BackendAdress, _isDebugMode);
-            _controllers = new Controllers(_services, _playerGuid, personalizedOffersParameters.ImmediateStartSanityCheck, personalizedOffersParameters.SanityCheckPeriodInSecond);
+            _controllers = new Controllers(_services, new ControllersData(
+                 _playerGuid,
+                personalizedOffersParameters.ImmediateStartSanityCheck,
+                personalizedOffersParameters.SanityCheckPeriodInSecond,
+                personalizedOffersParameters.CurrencyTypeToLabel.CurrencyTypeToLabel
+            )) ;
         }
 
         public PersonalizedOffersController GetPersonalizedOffersController()
         {
             return _controllers.GetPersonalizedOffersController();
+        }
+
+        public CurrencyController GetCurrencyController()
+        {
+            return _controllers.GetCurrencyController();
+        }
+
+        public PersonalizedOffersSanityCheckController GetPersonalizedOffersSanityCheckController()
+        {
+            return _controllers.GetPersonalizedOffersSanityCheckController();
         }
     }
 }

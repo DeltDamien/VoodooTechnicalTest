@@ -15,3 +15,4 @@ MonoBehaviour:
   _backendAdress: https::/perso-offer/api/
   _immediateStartSanityCheck: 0
   _sanityCheckPeriodInSecond: 10
+  _currencyTypeToLabel: {fileID: 11400000, guid: 5442d71d3ae41ab40aa7c046944ac039, type: 2}

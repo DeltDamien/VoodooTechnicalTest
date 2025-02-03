@@ -41,8 +41,10 @@ namespace PersonalizedOffersSdk.Sample
         { 
             GameObject offerUIObject = GameObject.Instantiate(_offerPrefab, _offersContainer);
             SampleOfferUI sampleOfferUI = offerUIObject.GetComponent<SampleOfferUI>();
+            
             if (sampleOfferUI)
             {
+                sampleOfferUI.InjectCurrencyController(_personalizedOffersSDK?.GetCurrencyController());
                 sampleOfferUI.PopupulateOffer(offer, onPurchased);
             }
             _guidsToOffersPanelUI.Add(offer.GetUuid(), sampleOfferUI);
