@@ -5,22 +5,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using PersonalizedOffersSdk.Offers;
+using PersonalizedOffersSdk.Scripts.Sample;
+using System.Linq;
 
 namespace PersonalizedOffersSdk.Sample
 {
+    internal enum SamplePurchaseState
+    {
+        NonePurchased = 0,
+        RegularPurchased,
+        FirstChainedPurchased,
+        SecondChainedPurchased,
+        SamplePurchaseStateCount
+    }
+
     public class SampleInteractions : MonoBehaviour
     {
         [SerializeField] 
         private Button _startSessionButton;
         [SerializeField] 
-        private Transform _offersContainer;
-        [SerializeField] 
-        private GameObject _popupOfferPrefab;
+        private SampleOfferPopup _offersPopup;
         [SerializeField] 
         private PersonalizedOffersSDK _personalizedOffersSDK;
+        [SerializeField]
+        private SOOfferTypeLabelMap _offerTypeLabelMap;
 
         private PersonalizedOffersController _personalizedOffersController;
-        private GameObject _offerDisplay;
+        private bool isChainedOfferDisplayed = false;
+        private SamplePurchaseState _purchaseState = SamplePurchaseState.NonePurchased;
 
         private void Start()
         {
@@ -36,48 +48,45 @@ namespace PersonalizedOffersSdk.Sample
                 return;
             }
 
+            if (_offersPopup == null)
+            {
+                Debug.LogError("Popup offer is not set.");
+                return;
+            }
+
             _personalizedOffersController = _personalizedOffersSDK.GetPersonalizedOffersController();
-            _startSessionButton.onClick.AddListener(OnStartSessionClicked);
         }
 
 
 
-        private void OnStartSessionClicked()
+        public void OnStartSessionClicked()
         {
-            _personalizedOffersController.OnTriggerReceived(TriggerType.SessionStarted);
+            _offersPopup?.gameObject.SetActive(true);
+            _startSessionButton.gameObject.SetActive(false);
+            OnTriggerReceived(TriggerType.SessionStarted);
 
+        }
+
+        private void OnTriggerReceived(TriggerType triggerType)
+        {
+            Debug.Log(triggerType.ToString());
+            _personalizedOffersController?.OnTriggerReceived(triggerType);
             List<Offer> offers = _personalizedOffersController.GetOffers();
 
             if (offers.Count > 0)
             {
-                DisplayOffers(offers);
-            }
+                string offerPopupTitleLabel = _offerTypeLabelMap.OfferTypeToLabel.First(x => x.offerType == offers[0].GetOfferType()).label ?? "Offer";
+                _offersPopup.UpdatePopupUI(offerPopupTitleLabel);
 
-        }
-
-        private void DisplayOffers(List<Offer> offers)
-        {
-            _offerDisplay = Instantiate(_popupOfferPrefab, _offersContainer);
-            SampleOfferPopup sampleOfferPopup = _offerDisplay.GetComponent<SampleOfferPopup>();
-            if (sampleOfferPopup)
-            {
                 for (int i = 0; i < offers.Count; i++)
                 {
                     Guid offerGuid = offers[i].GetUuid();
-                    sampleOfferPopup.CreateOffer(offers[i].GetTitle(), offers[i], () =>
+                    _offersPopup.CreateOffer(offers[i].GetTitle(), offers[i], () =>
                     {
                         OnPurchaseOffer(offerGuid);
-                        GameObject.Destroy(_offerDisplay);
                     });
                 }
             }
-        }   
-
-        private void OnCancelOffer(Guid offerUuid)
-        {
-            _personalizedOffersController.CancelledOffer(offerUuid);
-            // cancel destroy for the sample, in real case just popup close
-            GameObject.Destroy(_offerDisplay);
         }
 
         private void OnPurchaseOffer(Guid offerUuid)
@@ -85,6 +94,31 @@ namespace PersonalizedOffersSdk.Sample
             // Should call here purchase controller which call iap unity sdk then store the purchase backend
             // let's consider that the purchase is successful
             _personalizedOffersController.ValidatePurchaseOffer(offerUuid);
+
+            _offersPopup.RemoveOffer(offerUuid);
+
+            ++_purchaseState;
+
+            if (_purchaseState == SamplePurchaseState.RegularPurchased)
+            {
+                _startSessionButton.gameObject.SetActive(true);
+                _offersPopup.gameObject.SetActive(false);
+                _purchaseState = SamplePurchaseState.NonePurchased;
+            }
+      
+            //if (_purchaseState < SamplePurchaseState.FirstChainedPurchased)
+            //{
+            //    OnTriggerReceived(TriggerType.OfferPurchased);
+            //} else
+            //{
+            //    if (_purchaseState == SamplePurchaseState.SecondChainedPurchased)
+            //    {
+            //        _startSessionButton.gameObject.SetActive(true);
+            //        _popupOffer.gameObject.SetActive(false);
+            //        _purchaseState = SamplePurchaseState.NonePurchased;
+            //    }
+            //}
+
         }
     }
 }

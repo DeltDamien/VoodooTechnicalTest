@@ -163,6 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _offerPrefab: {fileID: 4714340791653353685, guid: 0948bf91896a18d47bc41e2d888af031, type: 3}
   _offersContainer: {fileID: 192280253906031567}
+  _titleText: {fileID: 2667741791887334481}
 --- !u!1 &6899341342174739348
 GameObject:
   m_ObjectHideFlags: 0

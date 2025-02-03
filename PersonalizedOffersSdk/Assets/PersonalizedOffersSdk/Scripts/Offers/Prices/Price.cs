@@ -6,47 +6,26 @@ namespace PersonalizedOffersSdk.Offers.Prices
     {
         private readonly Currency _currency;
         private readonly float _amount;
-        private readonly Discount _discount; 
+        private readonly Discount _discount;
 
-        public Price(Currency currency, int amount, float discountPercent)
+        public Price(Currency currency, float amount, float discountPercent)
         {
-            _currency = currency ?? throw new ArgumentNullException(nameof(currency));
+            _currency = currency ?? new Currency(CurrencyType.USD);
             _amount = amount;
             _discount = new Discount(discountPercent);
         }
 
         public Price(PriceData priceData)
-        {
-            _currency = new Currency(priceData.currencyType);
-            _amount = priceData.amount;
-            _discount = new Discount(priceData.discountPercent);
-        }
+            : this(new Currency(priceData.currencyType), priceData.amount, priceData.discountPercent) { }
 
-        public string GetFinalPriceLabel()
-        {
-            return $"{_discount.CalculateFinalPriceAmount(_amount)} {_currency.getPriceCurrencyLabel()}";
-        }
+        public string GetFinalPriceLabel() => $"{GetFinalPrice()} {_currency.GetPriceCurrencyLabel()}";
 
-        public string GetOriginalPriceLabel()
-        {
-            return $"{_amount} {_currency.getPriceCurrencyLabel()}";
-        }
+        public string GetOriginalPriceLabel() => $"{_amount} {_currency.GetPriceCurrencyLabel()}";
 
-        public string GetDiscountLabel()
-        {
-            return _discount.GetDiscountLabel();
-        }
+        public string GetDiscountLabel() => _discount.GetDiscountLabel();
 
-        public float GetFinalPrice()
-        {
-            return _discount.CalculateFinalPriceAmount(_amount);
-        }
+        public float GetFinalPrice() => _discount.CalculateFinalPriceAmount(_amount);
 
-        public float GetOriginalPrice()
-        {
-            return _amount;
-        }
-
-
+        public float GetOriginalPrice() => _amount;
     }
 }

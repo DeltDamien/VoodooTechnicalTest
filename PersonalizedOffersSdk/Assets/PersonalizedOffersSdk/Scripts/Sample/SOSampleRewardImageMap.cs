@@ -16,14 +16,14 @@ namespace PersonalizedOffersSdk.Scripts.Sample
 
 
     [CreateAssetMenu(fileName = "SampleRewardImageMap", menuName = "Scriptable Objects/SampleRewardImageMap")]
-    public class SampleRewardImageMap : ScriptableObject
+    public class SOSampleRewardImageMap : ScriptableObject
     {
         [SerializeField] 
         private List<RewardToImage> _rewardToImages;
 
         public List<RewardToImage> RewardToImages => _rewardToImages;
 
-        public SampleRewardImageMap()
+        public SOSampleRewardImageMap()
         {
             _rewardToImages = new List<RewardToImage>();
         }

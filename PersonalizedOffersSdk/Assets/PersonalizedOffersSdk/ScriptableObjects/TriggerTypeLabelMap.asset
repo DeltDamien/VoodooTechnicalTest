@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e5af0ea461f0c04f9c76450e6cc47eb, type: 3}
-  m_Name: PersonalizedOffersParameters
+  m_Script: {fileID: 11500000, guid: 51c6ea18c1b1c5d489366d9052a1a001, type: 3}
+  m_Name: TriggerTypeLabelMap
   m_EditorClassIdentifier: 
-  _backendAdress: dasdas
-  _immediateStartSanityCheck: 1
-  _sanityCheckPeriodInSecond: 10
+  _offerTypeToLabel:
+  - offerType: 0
+    label: Offer !
+  - offerType: 1
+    label: Chained offer !

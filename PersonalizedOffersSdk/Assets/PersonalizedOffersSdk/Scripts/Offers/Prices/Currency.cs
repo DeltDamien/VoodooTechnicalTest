@@ -22,7 +22,7 @@ namespace PersonalizedOffersSdk.Offers.Prices
             CurrencyType = currencyType;
         }
 
-        public string getPriceCurrencyLabel()
+        public string GetPriceCurrencyLabel()
         {
             return Labels[this.CurrencyType];
         }

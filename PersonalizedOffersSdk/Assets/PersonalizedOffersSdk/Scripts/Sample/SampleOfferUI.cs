@@ -22,7 +22,7 @@ namespace PersonalizedOffersSdk.Sample
         [SerializeField] 
         private GameObject _rewardItemPrefab;
         [SerializeField]
-        private SampleRewardImageMap _sampleRewardImageMap;
+        private SOSampleRewardImageMap _sampleRewardImageMap;
         [SerializeField]
         private Sprite _fallbackImage;
         [SerializeField]
