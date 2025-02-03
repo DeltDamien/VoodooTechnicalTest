@@ -60,22 +60,16 @@ namespace PersonalizedOffersSdk.Controller
         #region ValidatePurchaseOffer
         public async UniTask<bool> ValidatePurchaseOfferAsync(Guid offerUuid)
         {
-            return await ValidatePurchaseOfferInternal(offerUuid, true);
-        }
-
-        private async UniTask<bool> ValidatePurchaseOfferInternal(Guid offerUuid, bool isAsync)
-        {
             bool isPurchaseValid = false;
             var offer = _offers.Find(o => o.GetUuid() == offerUuid);
             if (offer != null)
             {
 
-                 isPurchaseValid = isAsync
-                    ? await _personalizedOffersService.ValidatePurchaseOfferAsync(_playerUuid, offerUuid)
-                    : _personalizedOffersService.ValidatePurchaseOffer(_playerUuid, offerUuid);
+                isPurchaseValid = await _personalizedOffersService.ValidatePurchaseOfferAsync(_playerUuid, offerUuid);
+
 
                 if (isPurchaseValid)
-                {            
+                {
                     offer.MarkAsBought();
                 }
             }
@@ -87,18 +81,11 @@ namespace PersonalizedOffersSdk.Controller
         #region CancelledOffer
         public async UniTask<bool> CancelledOfferAsync(Guid offerUuid)
         {
-            return await CancelledOfferInternal(offerUuid, true);
-        }
-
-        private async UniTask<bool> CancelledOfferInternal(Guid offerUuid, bool isAsync)
-        {
             bool isCancelled = false;
             var offer = _offers.Find(o => o.GetUuid() == offerUuid);
             if (offer != null)
             {
-                isCancelled = isAsync
-                    ? await _personalizedOffersService.CancelledOfferAsync(_playerUuid, offerUuid)
-                    : _personalizedOffersService.CancelledOffer(_playerUuid, offerUuid);
+                isCancelled = await _personalizedOffersService.CancelledOfferAsync(_playerUuid, offerUuid);
 
                 if (isCancelled)
                 {
@@ -127,8 +114,8 @@ namespace PersonalizedOffersSdk.Controller
 
         public async UniTask UpdateOffersValidationAsync()
         {
-
-            HashSet<Guid> validOffersSet = new HashSet<Guid>(await _personalizedOffersService.GetValidOffersAsync(_playerUuid));
+            List<Guid> offersUid = await _personalizedOffersService.GetValidOffersAsync(_playerUuid);
+            HashSet<Guid> validOffersSet = new HashSet<Guid>(offersUid);
 
             _offers.RemoveAll(offer => !validOffersSet.Contains(offer.GetUuid()));
         }

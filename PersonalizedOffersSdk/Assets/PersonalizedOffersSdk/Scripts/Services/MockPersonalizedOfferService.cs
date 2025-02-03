@@ -129,24 +129,4 @@ public class MockPersonalizedOffersService : IPersonalizedOffersService
             });
         }
     }
-
-    public List<OfferData> GetTriggeredOffers(Guid playerUuid, TriggerType trigger)
-    {
-        return GetTriggeredOffersAsync(playerUuid, trigger).AsTask().GetAwaiter().GetResult();
-    }
-
-    public bool ValidatePurchaseOffer(Guid playerUuid, Guid offerUuid)
-    {
-        return ValidatePurchaseOfferAsync(playerUuid, offerUuid).AsTask().GetAwaiter().GetResult();
-    }
-
-    public bool CancelledOffer(Guid playerUuid, Guid offerUuid)
-    {
-        return CancelledOfferAsync(playerUuid, offerUuid).AsTask().GetAwaiter().GetResult();
-    }
-
-    public List<Guid> GetValidOffers(Guid playerUuid)
-    {
-        return GetValidOffersAsync(playerUuid).AsTask().GetAwaiter().GetResult();
-    }
 }

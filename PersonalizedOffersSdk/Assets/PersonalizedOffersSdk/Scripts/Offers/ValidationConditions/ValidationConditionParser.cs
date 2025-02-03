@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 namespace PersonalizedOffersSdk.Offers.ValidationConditions
 {
@@ -20,22 +21,41 @@ namespace PersonalizedOffersSdk.Offers.ValidationConditions
             {
                 return parser(value);
             }
-            throw new ArgumentException($"No parser found for {type}");
+            Debug.LogError($"No parser found for {type}");
+            return null;
         }
 
         private static object ParseTimeLeft(string value)
         {
-            return int.TryParse(value, out int seconds) ? seconds : throw new FormatException("Format invalide pour TimeLeft");
+            bool parseSuccess = int.TryParse(value, out int timeLeftInSeconds);
+            if (!parseSuccess)
+            {
+                Debug.LogError("Invalid format for TimeLeft");
+                return null;
+            }
+            return timeLeftInSeconds;
         }
 
         private static object ParseLevelSucceed(string value)
         {
-            return int.TryParse(value, out int level) ? level : throw new FormatException("Format invalide pour LevelSucceed");
+            bool parseSuccess = int.TryParse(value, out int level);
+            if (!parseSuccess)
+            {
+                Debug.LogError("Invalid format for LevelSucceed");
+                return null;
+            }
+            return level;
         }
 
         private static object ParseOfferToComplete(string value)
         {
-            return Guid.TryParse(value, out Guid uuid) ? uuid : throw new FormatException("Format invalide pour OfferToComplete");
+            bool parseSuccess = Guid.TryParse(value, out Guid offerUuid);
+            if (!parseSuccess)
+            {
+                Debug.LogError("Invalid format for OfferToComplete");
+                return null;
+            }
+            return offerUuid;
         }
 
         private static object ParseFeatureUnlocked(string value)

@@ -47,19 +47,6 @@ namespace PersonalizedOffersSdk.Service
 
         #region TriggerRequest
 
-        private List<OfferData> handleTriggerRequestResult(UnityWebRequest request)
-        {
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                throw new Exception($"Failed to fetch triggered offers: {request.error}");
-            }
-            else
-            {
-                TriggeredOffersResponse response = JsonUtility.FromJson<TriggeredOffersResponse>(request.downloadHandler.text);
-                return response.offers.ToList();
-            }
-        }
-
         public async UniTask<List<OfferData>> GetTriggeredOffersAsync(Guid playerUuid, TriggerType trigger)
         {
             UnityWebRequest request = CreateRequest(_backendAdress + _triggeredOffersEndpoint, "POST", JsonUtility.ToJson(new TriggeredOffersRequest
@@ -68,47 +55,23 @@ namespace PersonalizedOffersSdk.Service
                 trigger = trigger
             }));
 
-            UnityWebRequestAsyncOperation operation = request.SendWebRequest();
+             await request.SendWebRequest();
 
-            await operation;
-
-            return handleTriggerRequestResult(request);
-        }
-
-        public List<OfferData> GetTriggeredOffers(Guid playerUuid, TriggerType trigger)
-        {
-            UnityWebRequest request = CreateRequest(_backendAdress + _triggeredOffersEndpoint, "POST", JsonUtility.ToJson(new TriggeredOffersRequest
+            if (request.result != UnityWebRequest.Result.Success)
             {
-                playerUuid = playerUuid,
-                trigger = trigger
-            }));
-            request.SendWebRequest();
-
-            while (!request.isDone)
+                Debug.LogError($"Failed to fetch triggered offers: {request.error}");
+                return null;            }
+            else
             {
-                // TODO : add timeout
+                TriggeredOffersResponse response = JsonUtility.FromJson<TriggeredOffersResponse>(request.downloadHandler.text);
+                return response.offers.ToList();
             }
-
-            return handleTriggerRequestResult(request);
         }
+
 
         #endregion
 
         #region ValidatePurchaseOffer
-
-
-        private bool handleValidatePurchaseOfferResult(UnityWebRequest request)
-        {
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                throw new Exception($"Failed to validate purchase offer: {request.error}");
-            }
-            else
-            {
-                ValidateOfferResponse response = JsonUtility.FromJson<ValidateOfferResponse>(request.downloadHandler.text);
-                return response.success;
-            }
-        }
 
         public async UniTask<bool> ValidatePurchaseOfferAsync(Guid playerUuid, Guid offerUuid)
         {
@@ -118,47 +81,24 @@ namespace PersonalizedOffersSdk.Service
                 offerUuid = offerUuid
             }));
 
-            UnityWebRequestAsyncOperation operation = request.SendWebRequest();
-            await operation;
+            await request.SendWebRequest();
 
-            return handleValidatePurchaseOfferResult(request);
-        }
-
-        public bool ValidatePurchaseOffer(Guid playerUuid, Guid offerUuid)
-        {
-            UnityWebRequest request = CreateRequest(_backendAdress + _validatePurchaseEndpoint, "POST", JsonUtility.ToJson(new ValidateOfferRequest
+            if (request.result != UnityWebRequest.Result.Success)
             {
-                playerUuid = playerUuid,
-                offerUuid = offerUuid
-            }));
-            request.SendWebRequest();
-
-            while (!request.isDone)
-            {
-                // TODO : add timeout
+                Debug.LogError($"Failed to validate purchase offer: {request.error}");
+                return false;
             }
-
-            return handleValidatePurchaseOfferResult(request);
+            else
+            {
+                ValidateOfferResponse response = JsonUtility.FromJson<ValidateOfferResponse>(request.downloadHandler.text);
+                return response.success;
+            }
         }
 
         #endregion
 
 
         #region CancelledOffer
-
-        private bool handleCancelledOfferResult(UnityWebRequest request)
-        {
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                throw new Exception($"Failed to cancel offer: {request.error}");
-            }
-            else
-            {
-                CancelledOfferResponse response = JsonUtility.FromJson<CancelledOfferResponse>(request.downloadHandler.text);
-                return response.success;
-            }
-        }
-
 
         public async UniTask<bool> CancelledOfferAsync(Guid playerUuid, Guid offerUuid)
         {
@@ -168,63 +108,38 @@ namespace PersonalizedOffersSdk.Service
                 offerUuid = offerUuid.ToString()
             }));
 
-            UnityWebRequestAsyncOperation operation = request.SendWebRequest();
-            await operation;
+            await request.SendWebRequest();
 
-            return handleCancelledOfferResult(request);
-        }
-
-        public bool CancelledOffer(Guid playerUuid, Guid offerUuid)
-        {
-            UnityWebRequest request = CreateRequest(_backendAdress + _cancelOfferEndpoint, "POST", JsonUtility.ToJson(new CancelledOfferRequest
+            if (request.result != UnityWebRequest.Result.Success)
             {
-                playerUuid = playerUuid.ToString(),
-                offerUuid = offerUuid.ToString()
-            }));
-            request.SendWebRequest();
-
-            while (!request.isDone)
-            {
-                // TODO : add timeout
+                Debug.LogError($"Failed to cancel offer: {request.error}");
+                return false;
             }
-
-            return handleCancelledOfferResult(request);
+            else
+            {
+                CancelledOfferResponse response = JsonUtility.FromJson<CancelledOfferResponse>(request.downloadHandler.text);
+                return response.success;
+            }
         }
 
         #endregion
 
         #region GetValidOffers
 
-        private List<Guid> handleValidOffersResult (UnityWebRequest request)
+        public async UniTask<List<Guid>> GetValidOffersAsync(Guid playerUuid)
         {
+            UnityWebRequest request = CreateRequest(_backendAdress + _validOffersEndpoint, "GET");
+            await request.SendWebRequest();
             if (request.result != UnityWebRequest.Result.Success)
             {
-                throw new Exception($"Failed to fetch valid offers: {request.error}");
+                Debug.LogError($"Failed to fetch valid offers: {request.error}");
+                return null;
             }
             else
             {
                 ValidOffersResponse response = JsonUtility.FromJson<ValidOffersResponse>(request.downloadHandler.text);
                 return response.offersUuid.ToList();
             }
-        }
-
-        public async UniTask<List<Guid>> GetValidOffersAsync(Guid playerUuid)
-        {
-            UnityWebRequest unityWebRequest = CreateRequest(_backendAdress + _validOffersEndpoint, "GET");
-            UnityWebRequestAsyncOperation operation = unityWebRequest.SendWebRequest();
-            await operation;
-            return handleValidOffersResult(unityWebRequest);
-        }
-
-        public List<Guid> GetValidOffers(Guid playerUuid)
-        {
-            UnityWebRequest unityWebRequest = CreateRequest(_backendAdress + _validOffersEndpoint, "GET");
-            unityWebRequest.SendWebRequest();
-            while (!unityWebRequest.isDone)
-            {
-                // TODO : add timeout
-            }
-            return handleValidOffersResult(unityWebRequest);
         }
 
         #endregion
