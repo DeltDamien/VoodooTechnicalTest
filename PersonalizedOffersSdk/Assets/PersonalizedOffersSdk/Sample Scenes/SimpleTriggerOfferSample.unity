@@ -773,9 +773,9 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 25558101}
   - {fileID: 1112500999}
   - {fileID: 1291561081}
+  - {fileID: 25558101}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -951,11 +951,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 96181571929708029, guid: 844296368dd8b5548a0c27dd520935ff, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1742.351
+      value: 1663.7506
       objectReference: {fileID: 0}
     - target: {fileID: 96181571929708029, guid: 844296368dd8b5548a0c27dd520935ff, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1165.724
+      value: 708.0598
       objectReference: {fileID: 0}
     - target: {fileID: 96181571929708029, guid: 844296368dd8b5548a0c27dd520935ff, type: 3}
       propertyPath: m_LocalPosition.x
@@ -987,11 +987,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 96181571929708029, guid: 844296368dd8b5548a0c27dd520935ff, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.527
+      value: 30.0022
       objectReference: {fileID: 0}
     - target: {fileID: 96181571929708029, guid: 844296368dd8b5548a0c27dd520935ff, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 15.386
+      value: 3.3275
       objectReference: {fileID: 0}
     - target: {fileID: 96181571929708029, guid: 844296368dd8b5548a0c27dd520935ff, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1019,7 +1019,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1240932075734361446, guid: 844296368dd8b5548a0c27dd520935ff, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 584
+      value: 354.16
       objectReference: {fileID: 0}
     - target: {fileID: 1621546824161398943, guid: 844296368dd8b5548a0c27dd520935ff, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1043,7 +1043,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1930987695843820152, guid: 844296368dd8b5548a0c27dd520935ff, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2667741791887334481, guid: 844296368dd8b5548a0c27dd520935ff, type: 3}
       propertyPath: m_fontSize
