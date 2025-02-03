@@ -5,7 +5,7 @@ using UnityEngine;
 namespace PersonalizedOffersSdk.Offers.Prices
 {
     [System.Serializable]
-    public class CurrencyTypeToLabel
+    public struct CurrencyTypeToLabel
     {
         [SerializeField]
         public CurrencyType CurrencyType;

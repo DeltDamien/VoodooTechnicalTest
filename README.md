@@ -20,6 +20,17 @@ Regarding **additional features**, I think more **client-side caching** would be
 
 ## Sequence Diagrams for interaction between client and server
 
+### Offer class diagramm
+![Offer class diagram](./offer_class_diagram.png)
+
+### Controllers and Services diagram
+![Controllers and services diagram](./controllers_services_class_diagram.png)
+
+### Sample class diagramm
+![Sample class diagramm](./sample_class_diagram.png)
+
+## Class Diagrams
+
 ### Trigger Sequence Diagram
 ![Trigger sequence diagram](./trigger_sequence_diagram.png)
 
@@ -28,6 +39,7 @@ Regarding **additional features**, I think more **client-side caching** would be
 
 ### Offers validation Sequence Diagram
 ![Player purchase sequence diagram](./player_purchase_sequence_diagram.png)
+
 
 ## Infrastructure overview
 

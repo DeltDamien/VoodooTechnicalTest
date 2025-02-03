@@ -109,14 +109,14 @@ namespace PersonalizedOffersSdk.Sample
                         Guid offerGuid = offers[i].OfferUuid;
                         _offersPopup.CreateOffer(offers[i], () =>
                         {
-                            OnPurchaseOffer(offerGuid);
+                            OnOfferPurchased(offerGuid);
                         });
                     }
                 }
             }
         }
 
-        private async void OnPurchaseOffer(Guid offerUuid)
+        private async void OnOfferPurchased(Guid offerUuid)
         {
             // a validation could be here, but for the sake of the sample we are going to assume that the purchase is valid
             // await _personalizedOffersController.ValidatePurchaseOffer(offerUuid);

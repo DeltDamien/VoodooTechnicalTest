@@ -72,7 +72,7 @@ namespace PersonalizedOffersSdk.Sample
             }
         }
 
-        public void CreateOffer(Offer offer, System.Action onPurchased)
+        public void CreateOffer(Offer offer, Action onPurchased)
         { 
             GameObject offerUIObject = Instantiate(_offerPrefab, _offersContainer);
             SampleOfferUI sampleOfferUI = offerUIObject.GetComponent<SampleOfferUI>();
@@ -80,7 +80,7 @@ namespace PersonalizedOffersSdk.Sample
             if (sampleOfferUI != null && _personalizedOffersSDK != null)
             {
                 sampleOfferUI.InjectCurrencyController(_personalizedOffersSDK.GetCurrencyController());
-                sampleOfferUI.PopupulateOffer(offer, onPurchased);
+                sampleOfferUI.PopulateOffer(offer, onPurchased);
             }
             _guidsToOffersPanelUI.Add(offer.OfferUuid, sampleOfferUI);
             UpdateOffersUI();
@@ -103,7 +103,7 @@ namespace PersonalizedOffersSdk.Sample
                 OfferType offerType = _personalizedOffersController?.GetOfferType(guidToOffer.Key) ?? _fallbackOfferType;
                 if (offerType == OfferType.Chained || offerType == OfferType.Endless) {
                     bool IsOfferHasLinkedOffers = _personalizedOffersController.IsOfferHasLinkedOffers(guidToOffer.Key);
-                    bool isOfferLinkedOffers = _personalizedOffersController.isOfferLinkedOffers(guidToOffer.Key);
+                    bool isOfferLinkedOffers = _personalizedOffersController.IsOfferLinkedOffers(guidToOffer.Key);
 
                     if (IsOfferHasLinkedOffers)
                     {

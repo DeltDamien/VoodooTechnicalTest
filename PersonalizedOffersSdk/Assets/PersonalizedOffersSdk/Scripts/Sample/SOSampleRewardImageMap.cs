@@ -6,7 +6,7 @@ using UnityEngine;
 namespace PersonalizedOffersSdk.Scripts.Sample
 {
     [System.Serializable]
-    public class RewardToImage
+    public struct RewardToImage
     {
         [SerializeField] 
         public RewardType rewardType;

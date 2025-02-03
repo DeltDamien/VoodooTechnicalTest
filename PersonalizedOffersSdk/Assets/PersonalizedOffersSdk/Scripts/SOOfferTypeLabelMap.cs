@@ -6,7 +6,7 @@ namespace PersonalizedOffersSdk.Scripts.Sample
 {
     // TODO : label should be key for localization
     [System.Serializable]
-    public class TypeToLabel
+    public struct TypeToLabel
     {
         [SerializeField]
         public OfferType offerType;

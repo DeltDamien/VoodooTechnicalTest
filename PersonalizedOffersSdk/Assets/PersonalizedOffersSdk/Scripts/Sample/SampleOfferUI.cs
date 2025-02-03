@@ -138,7 +138,7 @@ namespace PersonalizedOffersSdk.Sample
             _currencyController = currencyController;
         }
 
-        public void PopupulateOffer(Offer offer, Action onPurchased)
+        public void PopulateOffer(Offer offer, Action onPurchased)
         {
             _offerTitle.text = offer.Title;
             _offerDescription.text = offer.Description;
@@ -165,15 +165,8 @@ namespace PersonalizedOffersSdk.Sample
                 if (sampleRewardUi)
                 {
                     Sprite sprite;
-                    var rewardImage = _sampleRewardImageMap.RewardToImages.Find(x => x.rewardType == rewards[i].RewardType);
-                    if (rewardImage != null)
-                    {
-                        sprite = rewardImage.sprite;
-                    }
-                    else
-                    {
-                        sprite = _fallbackImage;
-                    }
+                    sprite = _sampleRewardImageMap.RewardToImages.Find(x => x.rewardType == rewards[i].RewardType).sprite;
+
                     sampleRewardUi.PopulateReward(sprite, rewards[i].Amount.ToString());
                 }
             }

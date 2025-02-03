@@ -12,9 +12,7 @@ namespace PersonalizedOffersSdk.Offers
         }
 
         public void MarkAsBought() => IsBought = true;
-        public void MarkAsNotBought() => IsBought = false;
         public void MarkAsConditionMet() => IsConditionMet = true;
-        public void MarkAsNotConditionMet() => IsConditionMet = false;
     }
 }
 

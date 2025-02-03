@@ -129,7 +129,7 @@ namespace PersonalizedOffersSdk.Controller
             return _offers.Find(o => o.OfferUuid == guid).GetLinkedOffers().Count > 0;
         }
 
-        public bool isOfferLinkedOffers(Guid guid)
+        public bool IsOfferLinkedOffers(Guid guid)
         {
             for (int i = 0; i < _offers.Count; i++)
             {
