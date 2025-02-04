@@ -30,7 +30,7 @@ I tried to make the SDK as **engine-agnostic** as possible (well, Unity-agnostic
 I aimed to create a package that is ready-to-use for other developers, allowing them to easily integrate it into their games. I probably could not implement all the diagram to make it works but I wanted to do that to be sure my diagram was solid.
 The folder you want to check is PersonalizedSdk in the project. The UI is simple, without animation, to prove the capacity of the controllers to work.
 
-I know I spent some time trying to imagine all possible backend services (like purchase, user acquisition, authentication) and eventually removed my initial diagrams to focus solely on **personalized offers** in multiple diagrams (with notes to replace the older, more complex diagrams). Oh, and I also spent time on Postman documentation and Markdown files because I wanted a clean `README` (which should probably be divided into multiple files with links—sorry!). But I'm not sure if that was really a waste of time.
+I know I spent some time trying to imagine all possible backend services (like purchase, user acquisition, authentication) and eventually removed my initial diagrams to focus solely on **personalized offers** in multiple diagrams (with notes to replace the older, more complex diagrams). Oh, and I also spent time other tools that I know just by name to try to build the more complete solution like all tools in infrastructures diagram or Postman.
 I also had some small time-loss on getting back to C♯ since my last position was mainly typescript. I'm back on track now but I probably loose a small hour on that.
 
 Regarding **additional features**, I think more **client-side caching** would be interesting to create a more robust fallback system. A **push notification system** could also be added, with specific endpoints to fetch future personalized offers for the player. Additionally, **battle pass personalized offers** could be a great way to attract new players, and **multi-game personalized offers** (e.g., buy an offer to unlock unique items in another Voodoo game) could add a new layer of engagement.
@@ -86,14 +86,14 @@ It's a try but was interesting time spent, eager to learn more about tools I don
 #### Description:
 Fetches a list of offers triggered for a specific player based on a trigger type.
 
-### Endpoint:
+#### Endpoint:
 - **HTTP Verb**: `GET`
 - **Route**: `/api/offers/triggered`
 - **Headers**:
   - `Content-Type: application/json`
   - `Authorization: Bearer <token>`
 
-### Request Payload:
+#### Request Payload:
 ```json
 {
     "playerUuid": "123e4567-e89b-12d3-a456-426614174000",
@@ -101,7 +101,7 @@ Fetches a list of offers triggered for a specific player based on a trigger type
 }
 ```
 
-### Response Payload:
+#### Response Payload:
 ```json
 [
         {
@@ -286,7 +286,7 @@ The user attempts to purchase an offer that is no longer valid (for instance off
 
 - **User Feedback**:
   - Display a clear error message to the user (e.g., "This offer is no longer available.").
-  - Trigger immediatly a new offer to show to player to make him continue his purchase
+  - Trigger immediatly a new offer to show to player to make him continue his purchase.
 
 ---
 
@@ -299,7 +299,7 @@ The periodic validation offers sanity check overloads the server or client.
   - Limit the frequency of sanity checks, like once every 5 minutes.
 
 - **Client-Side Optimization**:
-  - Only validate offers that are currently visible to the user (in popup or vignette in game main hub)
+  - Only validate offers that are currently visible to the user (in popup or vignette in game main hub).
 
 ---
 
@@ -330,8 +330,7 @@ Use **unit tests** within Unity to simulate server responses. This approach is f
 
 #### Detailed Approach:
 1. **Mock Server Responses**:
-   - Create mock JSON responses for each API endpoint
-   - Store these responses as static files or hardcoded strings in Unity.
+   - Create mock JSON responses and request for each API endpoint
 
 2. **Unit Tests**:
    - Write unit tests using Unity’s **Test Framework**.
@@ -360,7 +359,7 @@ Use **unit tests** within Unity to simulate server responses. This approach is f
           
 4. **Testing Techniques**:
    - Test valid and invalid responses for each endpoint.
-   - Simulate edge cases from "Edge Cases and Mitigation Strategies" section
+   - Simulate edge cases from [Edge Cases and Mitigation Strategies](#edge-cases-and-mitigation-strategies) section
 
 #### Comments:
 - **Pros**:
@@ -408,9 +407,15 @@ Set up a lightweight **Node.js server** using **Vite-Express** to simulate serve
      ```
 
 2. **Run the Server**:
+   - Add to your package.json:
+   ```javascript
+        "scripts": {
+        "start": "node server.js"
+      }
+   ```
    - Start the server:
      ```bash
-     node server.js
+     npm run start
      ```
 
 3. **Test in Unity**:
