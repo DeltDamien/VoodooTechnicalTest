@@ -1,17 +1,37 @@
 # Personalized Offer System for a Mobile Game SDK
 
+# Table of Contents
+- [Introduction](#introduction)
+- [Problem Statement](#problem-statement)
+- [Personal Brief Note](#personal-brief-note)
+- [Sequence Diagrams for Interaction Between Client and Server](#sequence-diagrams-for-interaction-between-client-and-server)
+- [Class Diagrams](#class-diagrams)
+- [Infrastructure Overview](#infrastructure-overview)
+- [API Endpoint Definitions](#api-endpoint-definitions)
+- [Edge Cases and Mitigation Strategies](#edge-cases-and-mitigation-strategies)
+- [Mock Server Validation Strategies](#mock-server-validation-strategies)
+- [Testing and Scalability](#testing-and-scalability)
+
+---
+
 ## Introduction
+
 This project aims to design a personalized offer system for a mobile game SDK. The system allows server-side configuration of offers, including rewards, prices, triggers, validation conditions, and user segmentation. The system must also be extensible to support additional features such as multiple offers, chained offers, and endless offers.
 
 ## Problem Statement
+
 The main challenge is to create a scalable and modular system that clearly separates responsibilities between the client (Unity) and the server. The system must handle dynamic offers, validate complex conditions, and adapt to new types of offers and triggers with minimal changes.
+
 ---
 
 ## Personal Brief Note
-
-The primary goal for me was to make most of the logic server-side to ensure **scalability** and **security**. I aimed to create a package that is "clef en main" (ready-to-use) for other developers, allowing them to easily integrate it into their games. I tried to make the SDK as **engine-agnostic** as possible (well, Unity-agnostic in our case), except for the SDK entry point and the use of `UnityWebRequest` (which can be replaced with `HttpClient` in another implementation) in the service.
+The primary goal for me was to make most of the logic server-side to ensure **scalability** and **security**.
+I tried to make the SDK as **engine-agnostic** as possible (well, Unity-agnostic in our case), except for the SDK entry point and the use of `UnityWebRequest` (which can be replaced with `HttpClient` in another implementation) in the service.
+I aimed to create a package that is ready-to-use for other developers, allowing them to easily integrate it into their games. I probably could not implement all the diagram to make it works but I wanted to do that to be sure my diagram was solid.
+The folder you want to check is PersonalizedSdk in the project. The UI is simple, without animation, to prove the capacity of the controllers to work.
 
 I know I spent some time trying to imagine all possible backend services (like purchase, user acquisition, authentication) and eventually removed my initial diagrams to focus solely on **personalized offers** in multiple diagrams (with notes to replace the older, more complex diagrams). Oh, and I also spent time on Postman documentation and Markdown files because I wanted a clean `README` (which should probably be divided into multiple files with links—sorry!). But I'm not sure if that was really a waste of time.
+I also had some small time-loss on getting back to C♯ since my last position was mainly typescript. I'm back on track now but I probably loose a small hour on that.
 
 Regarding **additional features**, I think more **client-side caching** would be interesting to create a more robust fallback system. A **push notification system** could also be added, with specific endpoints to fetch future personalized offers for the player. Additionally, **battle pass personalized offers** could be a great way to attract new players, and **multi-game personalized offers** (e.g., buy an offer to unlock unique items in another Voodoo game) could add a new layer of engagement.
 
@@ -20,7 +40,7 @@ Regarding **additional features**, I think more **client-side caching** would be
 
 ## Sequence Diagrams for interaction between client and server
 
-### Offer class diagramm
+### Offer class diagram
 ![Offer class diagram](./offer_class_diagram.png)
 
 ### Controllers and Services diagram
@@ -51,7 +71,7 @@ It's a try but was interesting time spent, eager to learn more about tools I don
 
 ## API Endpoint Definitions
 
-## Summary
+### Summary
 
 | Endpoint                | HTTP Verb | Route                      | Description                                      |
 |-------------------------|----------|----------------------------|--------------------------------------------------|
@@ -208,7 +228,7 @@ Fetches a list of valid offer UUIDs for a specific player.
 
 ## Edge Cases and Mitigation Strategies
 
-#### Summary of Edge Cases and Mitigation Strategies
+### Summary of Edge Cases and Mitigation Strategies
 
 | **Edge Case**                     | **Mitigation Strategies**                                                                 |
 |------------------------------------|------------------------------------------------------------------------------------------|
@@ -220,10 +240,11 @@ Fetches a list of valid offer UUIDs for a specific player.
 
 
 ### 1. Backend Unavailable
-### Scenario:
+
+#### Scenario:
 The server is down or unreachable, and the client cannot fetch or validate offers.
 
-### Mitigation Strategies:
+#### Mitigation Strategies:
 - **Client-Side Caching**:
   - Cache offers locally on the client so that the game can still display offers even if the server is unavailable.
   - Use a timestamp to invalidate cached offers after a certain period.
@@ -236,11 +257,11 @@ The server is down or unreachable, and the client cannot fetch or validate offer
 
 ---
 
-## 2. Invalid JSON Response
-### Scenario:
+### 2. Invalid JSON Response
+#### Scenario:
 The server sends malformed or invalid JSON data, causing the client to fail when parsing the response.
 
-### Mitigation Strategies:
+#### Mitigation Strategies:
 - **Server-Side Validation**:
   - Ensure the server validates all responses before sending them to the client.
 
@@ -252,11 +273,11 @@ The server sends malformed or invalid JSON data, causing the client to fail when
 
 ---
 
-## 3. User Tries to Purchase an Invalid Offer
-### Scenario:
+### 3. User Tries to Purchase an Invalid Offer
+#### Scenario:
 The user attempts to purchase an offer that is no longer valid (for instance offer expired or already purchased).
 
-### Mitigation Strategies:
+#### Mitigation Strategies:
 - **Pre-Purchase Validation**:
   - Validate the offer on the server before processing the purchase.
 
@@ -269,24 +290,24 @@ The user attempts to purchase an offer that is no longer valid (for instance off
 
 ---
 
-## 4. Sanity Check Overloads the System
-### Scenario:
+### 4. Sanity Check Overloads the System
+#### Scenario:
 The periodic validation offers sanity check overloads the server or client.
 
-### Mitigation Strategies:
+#### Mitigation Strategies:
 - **Throttling**:
-  - Limit the frequency of sanity checks (e.g., once every 5 minutes).
+  - Limit the frequency of sanity checks, like once every 5 minutes.
 
 - **Client-Side Optimization**:
   - Only validate offers that are currently visible to the user (in popup or vignette in game main hub)
 
 ---
 
-## 5. Network Latency or Timeouts
-### Scenario:
+### 5. Network Latency or Timeouts
+#### Scenario:
 Network latency or timeouts cause delays or failures in fetching or validating offers.
 
-### Mitigation Strategies:
+#### Mitigation Strategies:
   - **Timeout Handling**:
     - Set a reasonable timeout for API requests (something like 10 seconds) and handle timeouts gracefully in Unity.
 
@@ -297,17 +318,17 @@ Network latency or timeouts cause delays or failures in fetching or validating o
 ---
 
 
-# Mock Server Validation Strategies
+## Mock Server Validation Strategies
 
 To validate the personalized offer system without relying on actual server endpoints, we propose the following three strategies in order of preference:
 
 ---
 
-## 1. Unit Tests with Mock Responses directly in Unity
-### Description:
+### 1. Unit Tests with Mock Responses directly in Unity
+#### Description:
 Use **unit tests** within Unity to simulate server responses. This approach is fully embedded in Unity and can be automated using **GitHub Actions**.
 
-### Detailed Approach:
+#### Detailed Approach:
 1. **Mock Server Responses**:
    - Create mock JSON responses for each API endpoint
    - Store these responses as static files or hardcoded strings in Unity.
@@ -341,7 +362,7 @@ Use **unit tests** within Unity to simulate server responses. This approach is f
    - Test valid and invalid responses for each endpoint.
    - Simulate edge cases from "Edge Cases and Mitigation Strategies" section
 
-### Comments:
+#### Comments:
 - **Pros**:
   - Fully integrated into Unity.
   - Easy to automate with GitHub Actions.
@@ -352,11 +373,11 @@ Use **unit tests** within Unity to simulate server responses. This approach is f
 
 ---
 
-## 2. Small Node.js Server with Vite-Express
-### Description:
+### 2. Small Node.js Server with Vite-Express
+#### Description:
 Set up a lightweight **Node.js server** using **Vite-Express** to simulate server endpoints. This approach provides more flexibility than unit tests and can be run locally or in a CI/CD pipeline.
 
-### Detailed Approach:
+#### Detailed Approach:
 1. **Set Up Node.js Server**:
    - Install Node.js and create a new project:
      ```bash
@@ -393,13 +414,13 @@ Set up a lightweight **Node.js server** using **Vite-Express** to simulate serve
      ```
 
 3. **Test in Unity**:
-   - Point Unity’s API calls to `http://localhost:3000`.
+   - Point Unity’s API calls to local server.
    - Test all endpoints and validate the responses.
 
 4. **Testing Techniques**:
    - Simulate different server responses like success, failure or edge cases.
 
-### Comments:
+#### Comments:
 - **Pros**:
   - More flexible than unit tests.
   - Can simulate real-world server behavior.
@@ -410,13 +431,13 @@ Set up a lightweight **Node.js server** using **Vite-Express** to simulate serve
 
 ---
 
-## 3. Postman Mock Server
-### Description:
+### 3. Postman Mock Server
+#### Description:
 Use **Postman** to create a mock server and simulate API responses. This approach is quick to set up but requires familiarity with Postman.
 I've never used myself contrary to the 2 other but I know it exists.
 [Documentation here](https://learning.postman.com/docs/designing-and-developing-your-api/mocking-data/setting-up-mock/)
 
-### Detailed Approach:
+#### Detailed Approach:
 
 1. **Create a Postman Collection**:
    - Define all API endpoints in a new collection
@@ -431,7 +452,7 @@ I've never used myself contrary to the 2 other but I know it exists.
 3. **Testing Techniques**:
    - Simulate different scenarios by updating the mock responses in Postman.
 
-### Comments:
+#### Comments:
 - **Pros**:
   - Quick and easy to set up.
   - No coding required.
@@ -443,7 +464,7 @@ I've never used myself contrary to the 2 other but I know it exists.
 
 ---
 
-### My preferences
+#### My preferences
 1. **Start with Unit Tests**:
    - Ideal for initial validation and integration with Unity.
    - Easy to automate with GitHub Actions.
@@ -454,6 +475,33 @@ I've never used myself contrary to the 2 other but I know it exists.
 3. **Use Postman for Quick Prototyping**:
    - Useful for quick validation or sharing with non-technical team members (and if you know how to use it).
 
+---
+
+## Testing and Scalability
+
+### Testing Strategies
+
+| **Category**            | **Purpose**                                                                 | **Tools/Examples**                                                                 |
+|--------------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| **Unit Testing**         | Test individual components in isolation in their normal behaviour.                                    | Unity Test Framework, NUnit                                        |
+| **Integration Testing**  | Test interactions between components.                                       |  Unity Test ↔ mock server                           |
+| **End-to-End Testing**   | Test the entire system from client to server.                               | Node server, Postman.                                                    |
+| **Edge Case Testing**    | Test unexpected scenarios.                                                  | Simulate server downtime, malformed JSON for instance using  Unity Test                   |
+| **Stress Testing**       | Push the system beyond its limits to identify breaking points.              | Simulate lots of concurrent users, database overload. I know JMeter exist, never use it.  |
+
+
+### Scalability Strategies
+
+
+I've never used most of a tool writing here for client side. This in purely theorical in my mind but I'd be glad to have discussion over this.
+
+| **Category**            | **Purpose**                                                                 | **Implementation**                                                                |
+|--------------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| **Horizontal Scaling**   | Handle increased traffic by adding more servers.                            | Use load balancers and auto-scaling like AWS     |
+| **Batching**   | Reduce server load.                            | Trigger system is already a batching system. Expand it to more triggers.|
+| **Caching**              | Improve response times and reduce server load.                          | Cache data struct in server side. I'd start simple with caching mechanism directly into backend code but a quick google search tell me tools like Redis exist. Don't know how to implement and use it. Implements more robust cache for offer in Unity |
+| **Database Optimization**| Ensure the database can handle large volumes of data.                       | Tansactionnal database like PostgreSQL or MySql for indexing and partionning and NoSql for scalabilty like MongoDB   |     |
+| **Monitoring and Logging**| Identify and resolve performance issues proactively.                        | Datadog or Prometheus for Metric, ElasticSearch for logging      |
 ---
 
 
