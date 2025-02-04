@@ -408,11 +408,11 @@ Set up a lightweight **Node.js server** using **Vite-Express** to simulate serve
 
 2. **Run the Server**:
    - Add to your package.json:
-   ```javascript
-        "scripts": {
-        "start": "node server.js"
-      }
-   ```
+     ```javascript
+            "scripts": {
+            "start": "node server.js"
+          }
+     ```
    - Start the server:
      ```bash
      npm run start
